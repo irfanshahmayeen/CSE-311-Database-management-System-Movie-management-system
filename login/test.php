@@ -15,6 +15,7 @@ echo $_SESSION['user_full_name'];
 </head>
 <body>
     <h1>This is movie </h1>
+    <h2>this is also movie</h2>
 </body>
 </html>
 
