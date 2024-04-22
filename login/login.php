@@ -17,6 +17,7 @@ if(isset($_POST['email'])){
     if(mysqli_num_rows($query) > 0){
         $data = mysqli_fetch_array($query);
         $user_full_name = $data['FullName'];
+        session_start();
 
         $_SESSION['user_full_name'] = $user_full_name;
         
