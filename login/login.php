@@ -23,7 +23,7 @@ if(isset($_POST['email'])){
         
        
        // header("location:../welcome/welcome.php");
-       header("location:test.php");
+       header("location:../welcome/welcome.php");
     }
     
     else{

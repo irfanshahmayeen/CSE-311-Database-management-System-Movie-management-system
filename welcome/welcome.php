@@ -1,7 +1,9 @@
 <?php
 include '../connection.php';
+include 'welcome.html';
 session_start();
-echo $_SESSION['user_full_name'];
+$user_full_name = $_SESSION['user_full_name'];
+if(!empty($user_full_name)) {
 
 ?>
 
@@ -14,9 +16,16 @@ echo $_SESSION['user_full_name'];
     <title>Document</title>
 </head>
 <body>
-    <h1>This is movie </h1>
+    <h1>This is movie ইরফান </h1>
 </body>
 </html>
+
+
+<?php
+}
+  else {
+    header("location:../login/login.php");
+  }
 
 
 
