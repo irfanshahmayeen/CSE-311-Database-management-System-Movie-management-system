@@ -1,38 +1,36 @@
 <?php
+session_start();
 
 include '../connection.php';
 include 'login.html';
 
-
-if(isset($_POST['email'])){
+if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
 
     $user_email = $_POST['email'];
-    $user_password = $_POST['password'];   
+    $user_password = $_POST['password'];
+    $user_type = $_POST['user_type'];   
 
-    $sql = "SELECT * FROM signup WHERE 
-            Email='$user_email' AND Password = '$user_password'";
+    $sql = "SELECT * FROM signup WHERE Email='$user_email' AND Password='$user_password' AND User_Type='$user_type'";
 
     $query = $conn->query($sql);
 
-    if(mysqli_num_rows($query) > 0){
+    if(mysqli_num_rows($query) > 0) {
         $data = mysqli_fetch_array($query);
         $user_full_name = $data['FullName'];
+
         session_start();
 
         $_SESSION['user_full_name'] = $user_full_name;
         
-       
-       // header("location:../welcome/welcome.php");
-       header("location:../welcome/welcome.php");
-    }
-    
-    else{
-       header("location:login.php");
-      // echo 'not ok';
+        if($user_type === 'admin') {
+            header("location:../movieadmin/AdminShowMovieList.php");
+        } else if ($user_type === 'user'){
+            header("location:../welcome/welcome.php");
+        }
+        exit();
+    } else {
+        header("location:login.html"); // Redirect back to login page
+        exit();
     }
 }
-
-
-  
-
 ?>
