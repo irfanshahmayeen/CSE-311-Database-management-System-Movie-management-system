@@ -8,9 +8,15 @@ if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
 
     $user_email = $_POST['email'];
     $user_password = $_POST['password'];
-    $user_type = $_POST['user_type'];   
+    $user_type = $_POST['user_type'];  
+    
+    if($user_type === 'user'){
 
-    $sql = "SELECT * FROM signup WHERE Email='$user_email' AND Password='$user_password' AND User_Type='$user_type'";
+    $sql = "SELECT * FROM usersignup WHERE Email='$user_email' AND Password='$user_password' AND User_Type='$user_type'";
+    }
+    else if ($user_type==='admin'){
+        $sql = "SELECT * FROM adminsignup WHERE Email='$user_email' AND Password='$user_password' AND User_Type='$user_type'";
+    }
 
     $query = $conn->query($sql);
 

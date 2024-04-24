@@ -25,8 +25,15 @@ if (isset($_POST['email'])) {
 
 
     //checking is the any duplicate email or phone number or user id 
-    $checkUser = "SELECT * FROM signup 
+    if($user_type === 'user'){
+    $checkUser = "SELECT * FROM usersignup 
                 WHERE Email = '$email' OR Phone = '$phone'  ";
+    }
+    else if($user_type==='admin'){
+        $checkUser = "SELECT * FROM adminsignup 
+                WHERE Email = '$email' OR Phone = '$phone'  ";
+    }
+
     $result  = mysqli_query($conn,$checkUser);
     $count   = mysqli_num_rows($result);
 
@@ -46,8 +53,15 @@ if (isset($_POST['email'])) {
     
 
     // Construct SQL query
-    $sql = "INSERT INTO signup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
+    if($user_type === 'user'){
+    $sql = "INSERT INTO usersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
                         VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type')";
+    }
+
+    else if($user_type==='admin') {
+        $sql = "INSERT INTO adminsignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
+                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type')";
+ }
    
 
 
