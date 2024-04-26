@@ -37,6 +37,8 @@ if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
     } else {
         header("location:login.html"); // Redirect back to login page
         exit();
+        
+
     }
 }
 ?>

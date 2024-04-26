@@ -77,6 +77,7 @@
             <tr>
                 <th>MovieID</th>
                 <th>Title</th>
+                <th>Poster</th>
                 <th>Genre</th>
                 <th>Director</th>
                 <th>Release Date</th>
@@ -97,6 +98,12 @@
                     echo "<tr>";
                     echo "<td>" . $row["MovieID"] . "</td>";
                     echo "<td>" . $row["Title"] . "</td>";
+                    // Fetching image filename from the database
+                    $image_filename = $row["Image"];
+                    // Generating the image path
+                    $image_path = "images/" . $image_filename;
+                    // Displaying the image
+                    echo "<td><img src='" . $image_path . "' alt='" . $row["Title"] . "' width='100'></td>";
                     echo "<td>" . $row["Genre"] . "</td>";
                     echo "<td>" . $row["Director"] . "</td>";
                     echo "<td>" . $row["Release_date"] . "</td>";
@@ -111,7 +118,7 @@
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='10'>No movies found</td></tr>";
+                echo "<tr><td colspan='11'>No movies found</td></tr>";
             }
             ?>
         </tbody>

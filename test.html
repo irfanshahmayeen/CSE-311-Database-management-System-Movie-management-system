@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Theater Ticket System</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background-color: #bdc3c7;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .seat.selected {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Theater Seat Selection</h1>
+    <div class="container">
+        <!-- Create seats using JavaScript -->
+    </div>
+
+    <script>
+        // Define the number of rows and seats per row
+        const numRows = 6;
+        const seatsPerRow = 10;
+
+        // Get the container element
+        const container = document.querySelector('.container');
+
+        // Function to create seats
+        function createSeats() {
+            for (let i = 0; i < numRows; i++) {
+                for (let j = 0; j < seatsPerRow; j++) {
+                    // Create a seat element
+                    const seat = document.createElement('div');
+                    seat.classList.add('seat');
+                    seat.innerText = `${String.fromCharCode(65 + i)}${j + 1}`; // Convert ASCII code to letters for row numbers
+                    container.appendChild(seat);
+
+                    // Add click event listener to select/deselect seat
+                    seat.addEventListener('click', () => {
+                        seat.classList.toggle('selected');
+                    });
+                }
+            }
+        }
+
+        // Call the function to create seats
+        createSeats();
+    </script>
+</body>
+</html>
