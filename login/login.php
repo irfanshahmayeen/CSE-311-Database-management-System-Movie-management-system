@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 
 include '../connection.php';
 include 'login.html';
@@ -23,10 +23,11 @@ if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
     if(mysqli_num_rows($query) > 0) {
         $data = mysqli_fetch_array($query);
         $user_full_name = $data['FullName'];
+        $user_id = $data['UserID'];
 
         session_start();
 
-        $_SESSION['user_full_name'] = $user_full_name;
+        $_SESSION['user_id'] = $user_id;
         
         if($user_type === 'admin') {
             header("location:../movieadmin/AdminShowMovieList.php");

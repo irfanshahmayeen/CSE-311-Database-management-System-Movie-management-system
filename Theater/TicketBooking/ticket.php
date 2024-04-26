@@ -84,69 +84,69 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hall Running Show Movies</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Movie Name</th>
-                    <th>Poster</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Ticket Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                include '../../connection.php';
+<div class="container">
+    <h1>Hall Running Show Movies</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Movie Name</th>
+            <th>Poster</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Ticket Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        include '../../connection.php';
 
-                // Query to fetch movie information from theaterMovie and movie tables
-                $query = "SELECT theatermovie.*, movie.* FROM theatermovie INNER JOIN movie ON theatermovie.MovieID = movie.MovieID";
-                $result = mysqli_query($conn, $query);
+        // Query to fetch movie information from theaterMovie and movie tables
+        $query = "SELECT theatermovie.*, movie.* FROM theatermovie INNER JOIN movie ON theatermovie.MovieID = movie.MovieID";
+        $result = mysqli_query($conn, $query);
 
-                // Check if query executed successfully and returned a valid result
-                if ($result && mysqli_num_rows($result) > 0) {
-                    // Loop through each movie entry
-                    while($row = mysqli_fetch_assoc($result)) {
-                        ?>
-                        <tr>
-                            <td>
-                                <!-- Movie name with a link -->
-                                <a href="#" onclick="selectMovie('<?php echo $row['Title']; ?>')"><?php echo $row['Title']; ?></a>
-                            </td>
-                            <td>
-                                <!-- Clickable poster with confirmation popup -->
-                                <a href="javascript:void(0);" onclick="showConfirmation('<?php echo $row['Title']; ?>')">
-                                    <img src="../../movieadmin/images/<?php echo $row['Image']; ?>" alt="<?php echo $row['Title']; ?>">
-                                </a>
-                            </td>
-                            <td><?php echo $row['StartTime']; ?></td>
-                            <td><?php echo $row['EndTime']; ?></td>
-                            <td>$<?php echo $row['TicketPrice']; ?></td>
-                        </tr>
-                        <?php
-                    }
-                } else {
-                    // Display a message if no movies found
-                    echo "<tr><td colspan='5'>No movies found</td></tr>";
-                }
+        // Check if query executed successfully and returned a valid result
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Loop through each movie entry
+            while($row = mysqli_fetch_assoc($result)) {
                 ?>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- JavaScript function to select a movie -->
-    <script>
-        function selectMovie(movieName) {
-            // You can perform any action here, like storing the selected movie name in a variable or redirecting to another page
-            alert("You have selected: " + movieName);
-        }
-
-        function showConfirmation(movieName) {
-            if (confirm("Are you sure you want to book tickets for '" + movieName + "'?")) {
-                window.location.href = "booking.php?movie=" + encodeURIComponent(movieName);
+                <tr>
+                    <td>
+                        <!-- Movie name with a link -->
+                        <a href="#" onclick="selectMovie('<?php echo $row['Title']; ?>')"><?php echo $row['Title']; ?></a>
+                    </td>
+                    <td>
+                        <!-- Clickable poster with confirmation popup -->
+                        <a href="javascript:void(0);" onclick="showConfirmation('<?php echo $row['Title']; ?>', '<?php echo $row['HallMovieID']; ?>')">
+                            <img src="../../movieadmin/images/<?php echo $row['Image']; ?>" alt="<?php echo $row['Title']; ?>">
+                        </a>
+                    </td>
+                    <td><?php echo $row['StartTime']; ?></td>
+                    <td><?php echo $row['EndTime']; ?></td>
+                    <td>$<?php echo $row['TicketPrice']; ?></td>
+                </tr>
+                <?php
             }
+        } else {
+            // Display a message if no movies found
+            echo "<tr><td colspan='5'>No movies found</td></tr>";
         }
-    </script>
+        ?>
+        </tbody>
+    </table>
+</div>
+
+<!-- JavaScript function to select a movie -->
+<script>
+    function selectMovie(movieName) {
+        // You can perform any action here, like storing the selected movie name in a variable or redirecting to another page
+        alert("You have selected: " + movieName);
+    }
+
+    function showConfirmation(movieName, hallMovieID) {
+        if (confirm("Are you sure you want to book tickets for '" + movieName + "'?")) {
+            window.location.href = "booking.php?hallMovieID=" + hallMovieID;
+        }
+    }
+</script>
 </body>
 </html>

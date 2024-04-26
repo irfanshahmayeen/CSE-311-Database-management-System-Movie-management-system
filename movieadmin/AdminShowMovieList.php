@@ -1,3 +1,14 @@
+
+    <?php/*/
+
+                 session_start();
+                 $user_id = $_SESSION['user_id'];
+                 if(!empty($user_id)){
+     
+    */?>
+    
+
+    
 <?php include '../connection.php'; ?>
 
 <!DOCTYPE html>
@@ -127,3 +138,10 @@
     <button class="add-movie-btn" onclick="window.location.href='AdminAddMovie.php'">Add Movie</button>
 </body>
 </html>
+
+
+<?PHP/*
+        }else{
+               header('location:../login/login.php');
+        }
+*/?>
