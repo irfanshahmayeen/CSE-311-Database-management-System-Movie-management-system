@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Management - Food List</title>
     <style>
-        /* Styles unchanged, same as before */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -124,20 +123,13 @@
             margin-top: 10px;
             text-align: center;
         }
-
-        .side-view {
-            background-color: #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            display: none; /* Initially hide the side view */
-        }
+        
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="sidebar">
-        <!-- Sidebar content unchanged, same as before -->
-        <h2>Price Filter</h2>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Price Filter</h2>
             <label for="min-price">Min Price:</label>
             <input type="number" id="min-price" min="0" max="1000" value="0">
             <input type="range" id="price-slider-min" min="0" max="1000" value="0" oninput="updatePriceSliderValue('min')">
@@ -166,153 +158,74 @@
                     <input type="checkbox" id="not-available-now" onclick="filterAvailability()" checked> Not Available Now <br>
                 </div>
             </div>
-        
-    </div>
-    <div>
-        <h1>Food List</h1>
-        <table>
-            <thead>
-            <tr>
-                <th>Food Name</th>
-                <th>Image</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Availability</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody id="food-list">
-                <?php
-                include '../connection.php'; // Assuming this file includes database connection details
+        </div>
+        <div>
+            <h1>Food List</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food Name</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Availability</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="food-list">
+                    <?php
+                    include '../connection.php'; // Assuming this file includes database connection details
 
-                // Retrieve food information from the database
-                $sql = "SELECT * FROM foods";
-                $result = $conn->query($sql);
+                    // Retrieve food information from the database
+                    $sql = "SELECT * FROM foods";
+                    $result = $conn->query($sql);
 
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr class='food-item' data-category='" . $row["FoodCategory"] . "' data-availability='" . $row["FoodStatus"] . "'>";
-                        echo "<td>" . $row["FoodName"] . "</td>";
-                        echo "<td><img src='../movieadmin/foodimages/" . $row["FoodImage"] . "' alt='" . $row["FoodName"] . "'></td>";
-                        echo "<td>" . $row["FoodPrice"] . " TK</td>";
-                        echo "<td>" . ucfirst($row["FoodCategory"]) . "</td>";
-                        echo "<td>" . ($row["FoodStatus"] == 1 ? 'Available Now' : 'Not Available Now') . "</td>";
-                        echo "<td class='action-btns'>";
-                        if ($row["FoodStatus"] == 1) {
-                            echo "<button class='order-btn' onclick='orderFood(" . $row["FoodID"] . ", \"" . $row["FoodName"] . "\", " . $row["FoodPrice"] . ")'>Order</button>";
-                            echo "<button class='quantity-btn' onclick='incrementQuantity(" . $row["FoodID"] . ")'>+</button>";
-                            echo "<button class='quantity-btn' onclick='decrementQuantity(" . $row["FoodID"] . ")'>-</button>";
-                        } else {
-                            echo "<button class='quantity-btn' disabled>Order</button>";
-                            echo "<button class='quantity-btn' disabled>+</button>";
-                            echo "<button class='quantity-btn' disabled>-</button>";
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr class='food-item' data-category='" . $row["FoodCategory"] . "' data-availability='" . $row["FoodStatus"] . "'>";
+                            echo "<td>" . $row["FoodName"] . "</td>";
+                            echo "<td><img src='../movieadmin/foodimages/" . $row["FoodImage"] . "' alt='" . $row["FoodName"] . "'></td>";
+                            echo "<td>" . $row["FoodPrice"] . " TK</td>";
+                            echo "<td>" . ucfirst($row["FoodCategory"]) . "</td>";
+                            echo "<td>" . ($row["FoodStatus"] == 1 ? 'Available Now' : 'Not Available Now') . "</td>";
+                            echo "<td class='action-btns'>";
+                            if ($row["FoodStatus"] == 1) {
+                                echo "<button class='order-btn' onclick='orderFood(" . $row["FoodID"] . ")'>Order</button>";
+                                echo "<button class='quantity-btn' onclick='incrementQuantity(" . $row["FoodID"] . ")'>+</button>";
+                                echo "<button class='quantity-btn' onclick='decrementQuantity(" . $row["FoodID"] . ")'>-</button>";
+                            } else {
+                                echo "<button class='quantity-btn' disabled>Order</button>";
+                                echo "<button class='quantity-btn' disabled>+</button>";
+                                echo "<button class='quantity-btn' disabled>-</button>";
+                            }
+                            echo "</td>";
+                            echo "</tr>";
                         }
-                        echo "</td>";
-                        echo "</tr>";
+                    } else {
+                        echo "<tr><td colspan='6'>No food items found</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='6'>No food items found</td></tr>";
-                }
-                $conn->close();
-                ?>
-            </tbody>
-        </table>
+                    $conn->close();
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="side-view" id="food-side-view">
-    <h2>Selected Food</h2>
-    <div id="selected-food-list"></div>
-    <div id="total-food-price">Total Food Price: $0</div>
-    <button onclick="addAllToCart()">Add to Cart</button>
-</div>
-</div>
-
-<div class="side-view" id="food-side-view">
-    <h2>Selected Food</h2>
-    <div id="selected-food-list"></div>
-    <div id="total-food-price">Total Food Price: $0</div>
-</div>
-
-
-<script>
-    
-    // Keep track of selected food items and their quantities
-    var selectedFoods = [];
-   function orderFood(foodID, foodName, foodPrice) {
-    var existingFoodItem = selectedFoods[foodID];
-
-    if (existingFoodItem) {
-        existingFoodItem.quantity++;
-        updateQuantityInTable(foodID, existingFoodItem.quantity);
-    } else {
-        var existingItemElement = document.querySelector(`.selected-food-item[data-food-id="${foodID}"]`);
-
-        if (existingItemElement) {
-            var quantityInput = existingItemElement.querySelector('.food-quantity');
-            existingFoodItem = selectedFoods[foodID];
-            existingFoodItem.quantity = parseInt(quantityInput.value) + 1;
-            quantityInput.value = existingFoodItem.quantity;
-            updateTotalPrice();
-            return;
+    <script>
+        function orderFood(foodID) {
+            // Implement your order functionality here
+            alert("Order placed for food ID: " + foodID);
         }
 
-        document.getElementById('food-side-view').style.display = 'block';
-        document.getElementById('selected-food-list').innerHTML += `
-            <div class="selected-food-item" data-food-id="${foodID}">
-                <p>Name: ${foodName}, Price: ${foodPrice}</p>
-                <label for="quantity-${foodID}">Quantity:</label>
-                <input type="number" id="quantity-${foodID}" class="food-quantity" value="1" min="1" onchange="updateTotalPrice()">
-                <button onclick="deleteFood(${foodID})">Delete</button>
-            </div>`;
-        selectedFoods[foodID] = { name: foodName, price: foodPrice, quantity: 1 };
-    }
-    updateTotalPrice();
-}
-
-
-
-    function deleteFood(foodID) {
-        var selectedFoodItem = document.querySelector(`.selected-food-item[data-food-id="${foodID}"]`);
-        selectedFoodItem.remove();
-        delete selectedFoods[foodID];
-        updateTotalPrice();
-    }
-
-    function updateQuantityInTable(foodID, quantity) {
-        var selectedFoodItem = document.querySelector(`.selected-food-item[data-food-id="${foodID}"]`);
-        var quantityInput = selectedFoodItem.querySelector('.food-quantity');
-        var foodDetails = selectedFoodItem.querySelector('p');
-
-        if (quantity <= 0) {
-            selectedFoodItem.remove();
-            delete selectedFoods[foodID];
-        } else {
-            quantityInput.value = quantity;
-            if (quantity == 1) {
-                foodDetails.style.display = 'block'; // Show food name and price
-            }
+        function incrementQuantity(foodID) {
+            // Implement increment quantity functionality here
+            alert("Increment quantity for food ID: " + foodID);
         }
-    }
 
-    function incrementQuantity(foodID) {
-        orderFood(foodID, selectedFoods[foodID].name, selectedFoods[foodID].price);
-    }
-
-    function decrementQuantity(foodID) {
-        var existingFoodItem = selectedFoods[foodID];
-        if (existingFoodItem && existingFoodItem.quantity > 1) {
-            existingFoodItem.quantity--;
-            updateQuantityInTable(foodID, existingFoodItem.quantity);
-            updateTotalPrice();
+        function decrementQuantity(foodID) {
+            // Implement decrement quantity functionality here
+            alert("Decrement quantity for food ID: " + foodID);
         }
-    }
 
-    function updateTotalPrice() {
-        var totalPrice = 0;
-        for (const foodID in selectedFoods) {
-            totalPrice += selectedFoods[foodID].price * selectedFoods[foodID].quantity;
-        }
-        document.getElementById('total-food-price').innerText = 'Total Food Price: $' + totalPrice.toFixed(2);
-    }
         function filterCategory(checkbox) {
             var foodItems = document.getElementsByClassName('food-item');
             var checkedCategories = [];
@@ -396,33 +309,6 @@
             }
             filterPrice(); // Update food list based on the new slider value
         }
-
-        function addAllToCart() {
-    console.log("Adding to cart...");
-    var bookingTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    for (const foodID in selectedFoods) {
-        const foodItem = selectedFoods[foodID];
-        var quantity = foodItem.quantity;
-
-        console.log("Sending AJAX request for FoodID:", foodID);
-        // Send AJAX request to PHP script to insert into database
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "insert_cart.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
-            }
-        };
-        xhr.send("foodID=" + foodID + "&quantity=" + quantity + "&bookingTime=" + bookingTime);
-    }
-
-    selectedFoods = {}; // Clear selected foods after adding to cart
-    updateSideView(); // Update the side view (optional)
-    updateTotalPrice(); // Update the total price (optional)
-}
-
-</script>
+    </script>
 </body>
 </html>

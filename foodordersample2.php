@@ -222,7 +222,6 @@
     <h2>Selected Food</h2>
     <div id="selected-food-list"></div>
     <div id="total-food-price">Total Food Price: $0</div>
-    <button onclick="addAllToCart()">Add to Cart</button>
 </div>
 </div>
 
@@ -231,7 +230,7 @@
     <div id="selected-food-list"></div>
     <div id="total-food-price">Total Food Price: $0</div>
 </div>
-
+<button onclick="addAllToCart()">Add to Cart</button>
 
 <script>
     
@@ -396,33 +395,6 @@
             }
             filterPrice(); // Update food list based on the new slider value
         }
-
-        function addAllToCart() {
-    console.log("Adding to cart...");
-    var bookingTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    for (const foodID in selectedFoods) {
-        const foodItem = selectedFoods[foodID];
-        var quantity = foodItem.quantity;
-
-        console.log("Sending AJAX request for FoodID:", foodID);
-        // Send AJAX request to PHP script to insert into database
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "insert_cart.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
-            }
-        };
-        xhr.send("foodID=" + foodID + "&quantity=" + quantity + "&bookingTime=" + bookingTime);
-    }
-
-    selectedFoods = {}; // Clear selected foods after adding to cart
-    updateSideView(); // Update the side view (optional)
-    updateTotalPrice(); // Update the total price (optional)
-}
-
 </script>
 </body>
 </html>
