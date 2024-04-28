@@ -58,7 +58,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #ff0000;
         }
         img {
             max-width: 100px; /* Set the maximum width of the image */
@@ -165,7 +165,7 @@
             <input type="hidden" name="totalPrice" value="<?php echo $totalPrice; ?>">
             <button type="button" onclick="submitOrderForm()">Confirm Order</button>
         </form>
-        <form action="pdf.php" method="post">
+        <form id = "pdfForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <input type="hidden" name="totalPrice" value="<?php echo $totalPrice; ?>">
             <button type="submit">Download PDF</button>
         </form>
@@ -230,6 +230,79 @@
                 updateQuantity(foodID, newQuantity);
             }
         }
+
+        document.getElementById('pdfForm').addEventListener('submit', function(event) {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Simulate pressing the "Menu" key (key code 93) using the context menu event
+    var menuEvent = new MouseEvent('contextmenu', {
+        keyCode: 93,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(menuEvent);
+
+    // Wait for 500 milliseconds before simulating "Scroll Down" key (key code 40) three times
+    setTimeout(function() {
+        for (var i = 0; i < 3; i++) {
+            var scrollEvent = new KeyboardEvent('keydown', {
+                keyCode: 40,
+                bubbles: true,
+                cancelable: true
+            });
+            document.dispatchEvent(scrollEvent);
+        }
+
+        // Simulate pressing the "Enter" key (key code 13)
+        var enterEvent = new KeyboardEvent('keydown', {
+            keyCode: 13,
+            bubbles: true,
+            cancelable: true
+        });
+        document.dispatchEvent(enterEvent);
+
+        // Submit the form after simulating the key presses
+        event.target.submit();
+    }, 2000);
+});
+
+
+
+//printing pdf
+
+const pdfForm = document.getElementById('pdfForm');
+pdfForm.addEventListener('submit', function() {
+    // Print the document
+    print();
+    
+    // Wait for the print dialog to open
+    setTimeout(function() {
+        // Check if the print mode has changed (dialog is closed)
+        const mediaQueryList = window.matchMedia('print');
+        const printHandler = function(mql) {
+            if (!mql.matches) {
+                // Print dialog is closed, simulate Enter key press
+                simulateEnterKeyPress();
+                // Clean up the event listener
+                mediaQueryList.removeListener(printHandler);
+            }
+        };
+        // Add listener for print mode change
+        mediaQueryList.addListener(printHandler);
+    }, 5000); // Wait for 5 seconds after printing
+});
+
+function simulateEnterKeyPress() {
+    // Create and dispatch an Enter key press event
+    const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter'
+    });
+    document.dispatchEvent(enterEvent);
+}
+
+
+
 
     </script>
 </body>
