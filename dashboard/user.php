@@ -17,7 +17,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: url('https://i.gifer.com/8V9H.gif') no-repeat center center fixed;
+            background: url('https://cdn.dribbble.com/users/1646263/screenshots/3549733/camera_build_-_loop_1.gif') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -79,7 +79,7 @@
         }
 
         .menu ul li a:hover {
-            color: #ffff00;
+            color: #ff0000;
         }
     </style>
 </head>
