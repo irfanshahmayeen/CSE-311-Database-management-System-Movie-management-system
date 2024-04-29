@@ -21,14 +21,16 @@ $result = mysqli_query($conn, $query);
             padding: 0;
         }
 
-        .container {
-            width: 90%;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+        container {
+    width: 95%; /* Adjust width as needed */
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
 
         h1 {
             text-align: center;
@@ -106,6 +108,7 @@ $result = mysqli_query($conn, $query);
                 max-width: 80px;
             }
         }
+        
     </style>
 </head>
 <body>
@@ -150,9 +153,9 @@ $result = mysqli_query($conn, $query);
                         <td><?php echo $row['Location']; ?></td>
                         <td><?php echo $row['TicketPrice']; ?></td>
                         <td>
-                            <a href="theaterAdminDelete.php?id=<?php echo $row['MovieID']; ?>" class="delete-btn">Delete</a>
+                            <a href="theaterAdminDelete.php?hallmovieID=<?php echo $row['HallMovieID'];?>" class="delete-btn">Delete</a>
                             
-                            <a href="theaterAdminUpdate.html?id=<?php echo $row['MovieID']; ?>" class="edit-btn">Edit</a>
+                            <a href="theaterAdminUpdate.php?hallmovieID=<?php echo $row['HallMovieID']; ?>" class="edit-btn">Edit</a>
                         </td>
                     </tr>
                     <?php

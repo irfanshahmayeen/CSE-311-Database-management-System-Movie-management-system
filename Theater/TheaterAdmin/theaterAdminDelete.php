@@ -1,11 +1,11 @@
 <?php
 include '../../connection.php';
 
-if(isset($_GET['id'])) {
-    $movieID = $_GET['id'];
+if(isset($_GET['hallmovieID'])) {
+    $hallmovieID = $_GET['hallmovieID'];
 
      // Delete movie from the database
-    $sql = "DELETE FROM movie WHERE MovieID='$movieID'";
+    $sql = "DELETE FROM theatermovie WHERE HallMovieID='$hallmovieID'";
 
 
     if ($conn->query($sql) === TRUE) {

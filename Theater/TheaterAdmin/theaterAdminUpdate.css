@@ -1,61 +1,78 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
+/* theaterAdminUpdate.css */
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.admin-btn {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
 }
 
 h1 {
-    text-align: center;
-    margin: 20px 0;
     color: #333;
 }
 
+h2 {
+    color: #555;
+}
+
 form {
-    width: 50%;
-    margin: 0 auto;
+    margin-top: 20px;
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+    text-align: left;
 }
 
 input[type="text"],
 input[type="time"],
-select,
-input[type="number"] {
-    width: 100%;
+input[type="number"],
+select {
+    width: 200px;
     padding: 8px;
-    margin-bottom: 15px;
+    margin: 5px 0;
+    display: inline-block;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
     box-sizing: border-box;
 }
 
-input[type="submit"],
-a {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: #fff;
-    background-color: #007bff;
+select[multiple] {
+    height: 100px;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
     border: none;
-    border-radius: 5px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
+    border-radius: 8px;
 }
 
-input[type="submit"]:hover,
-a:hover {
-    background-color: #0056b3;
+.submit-btn {
+    background-color: #008CBA; /* Blue */
 }
 
-a {
-    margin-left: 10px;
-    background-color: #dc3545;
-}
-
-a:hover {
-    background-color: #c82333;
+.back-btn {
+    background-color: #f44336; /* Red */
 }

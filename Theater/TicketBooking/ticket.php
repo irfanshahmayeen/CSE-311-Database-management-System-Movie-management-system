@@ -144,7 +144,7 @@
 
     function showConfirmation(movieName, hallMovieID) {
         if (confirm("Are you sure you want to book tickets for '" + movieName + "'?")) {
-            window.location.href = "booking.php?hallMovieID=" + hallMovieID;
+            window.location.href = "bookingDate.php?hallMovieID=" + hallMovieID;
         }
     }
 </script>

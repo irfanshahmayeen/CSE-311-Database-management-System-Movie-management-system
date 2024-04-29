@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="profile-info">
+        <!-- Display user information here -->
+        <h2>User Profile</h2>
+        <p>Full Name: <?php echo $user_info['FullName']; ?></p>
+        <p>Email: <?php echo $user_info['Email']; ?></p>
+        <p>Phone: <?php echo $user_info['Phone']; ?></p>
+        <p>DOB: <?php echo $user_info['DOB']; ?></p>
+        <p>Gender: <?php echo $user_info['Gender']; ?></p>
+        <p>Address: <?php echo $user_info['Address']; ?></p>
+        <!-- You can show more user information here -->
+      </div>
+      <div class="menu">
+        <ul>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Orders</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Notification</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-content">
+      <!-- Main content will be displayed here -->
+    </div>
+  </div>
+</body>
+</html>

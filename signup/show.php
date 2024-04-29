@@ -58,7 +58,7 @@ include '../connection.php'; // Include your database connection file
         <h2>Signup Data</h2>
         <?php
         // Fetch data from the signup table
-        $sql = "SELECT * FROM signup";
+        $sql = "SELECT * FROM usersignup";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {

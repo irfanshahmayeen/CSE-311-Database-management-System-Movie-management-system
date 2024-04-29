@@ -37,11 +37,8 @@ if(isset($_POST['submit'])){
             }
         }
         
-        // If there's a conflict, display an alert message
-        if($conflict) {
-            echo "<script>alert('Movie cannot be added. There is a conflict with an existing movie at one of the selected locations.');</script>";
-        } else {
-            // No conflicts found, proceed with adding the movie
+        
+           
             
             // Retrieve movie information based on title
             $query = "SELECT * FROM movie WHERE Title = '$title'";
@@ -68,7 +65,7 @@ if(isset($_POST['submit'])){
                 echo "<script>alert('ভাই!! কি শুরু করলেন, এই সিনেমা এখনো বানানোই হয় নাই, আপনি বানান');</script>";
                 echo "<script>document.getElementById('title').value = '';</script>";
             }
-        }
+        
     }
 }
 ?>

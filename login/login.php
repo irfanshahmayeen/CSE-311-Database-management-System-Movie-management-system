@@ -24,19 +24,20 @@ if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
         $data = mysqli_fetch_array($query);
         $user_full_name = $data['FullName'];
         $user_id = $data['UserID'];
+        $user_email =$data['Email'];
 
         session_start();
 
-        $_SESSION['user_id'] = $user_id;
+        $_SESSION['user_email'] = $user_email;
         
         if($user_type === 'admin') {
             header("location:../movieadmin/AdminShowMovieList.php");
         } else if ($user_type === 'user'){
-            header("location:../welcome/welcome.php");
+            header("location:../dashboard/user.php");
         }
         exit();
     } else {
-        header("location:login.html"); // Redirect back to login page
+        header("location:login.php"); // Redirect back to login page
         exit();
         
 

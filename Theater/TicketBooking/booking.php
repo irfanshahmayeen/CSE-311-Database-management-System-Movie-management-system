@@ -91,18 +91,29 @@
         // End output buffering and discard any captured output
         ob_end_clean();
         $HallMovieID='6';
+        $bookingDate='';
         //recieving data from sent by ticket.php
        if(isset($_GET['hallMovieID'])){
             $HallMovieID  = $_GET['hallMovieID'];
+           
+           
     
             //$findsql = "SELECT * FROM  theatermovie WHERE  = HallMovieID='$HallMovieID'";
             //$result1 = mysqli_query($conn,$findsql);
             //$row1 =mysqli_fetch_array($result1);
            // $HallLocation = $row1['Location'];
         }
+        if(isset($_GET['bookingDate'])){
+           
+            $bookingDate  = $_GET['bookingDate'];
+           
+    
+          
+        }
+
 
         // Fetch booked seats from the database
-        $sql = "SELECT SeatNumber FROM bookings WHERE HallMovieID ='$HallMovieID'";
+        $sql = "SELECT SeatNumber FROM bookings WHERE HallMovieID ='$HallMovieID' AND BookingDate='$bookingDate'";
         $result = mysqli_query($conn, $sql);
 
         // Array to store booked seats
@@ -144,12 +155,14 @@
     </div>
 
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="bookingForm">
-        <input type="hidden" name="HallMovieID" value='<?php echo $HallMovieID; ?>'> <!-- Use PHP echo to output the value -->
-        <input type="hidden" name="SeatNumber" id="seatNumbers">
-        <input type="hidden" name="bookingTime" id="bookingTime">
-        <input type="hidden" name="paymentStatus" value="paid">
-        <button type="submit" id="submitBtn">Submit</button>
-    </form>
+    <input type="hidden" name="HallMovieID" value='<?php echo $HallMovieID; ?>'>
+    <input type="hidden" name="SeatNumber" id="seatNumbers">
+    <input type="hidden" name="bookingTime" id="bookingTime">
+    <input type="hidden" name="paymentStatus" value="paid">
+    <!-- Add the following line to include bookingDate in the form -->
+    <input type="hidden" name="bookingDate" value='<?php echo $bookingDate; ?>'>
+    <button type="submit" id="submitBtn">Submit</button>
+</form>
 
     <!-- Side view of the seat booking cart -->
     <div class="side-view">
@@ -210,25 +223,27 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         include '../../connection.php';
 
-        // Prepare data for insertion
-        $HallMovieID = $_POST['HallMovieID'];
-        $SeatNumbers = explode(',', $_POST['SeatNumber']); // Split seat numbers into an array
+        // Retrieve bookingDate from the $_POST array
+$bookingDate = isset($_POST['bookingDate']) ? $_POST['bookingDate'] : '';
 
-        $bookingTime = $_POST['bookingTime'];
-        $paymentStatus = $_POST['paymentStatus'];
+// Prepare data for insertion
+$HallMovieID = $_POST['HallMovieID'];
+$SeatNumbers = explode(',', $_POST['SeatNumber']); // Split seat numbers into an array
+$bookingTime = $_POST['bookingTime'];
+$paymentStatus = $_POST['paymentStatus'];
 
-        // Array to store successfully inserted seat numbers
-        $successSeatNumbers = [];
+// Array to store successfully inserted seat numbers
+$successSeatNumbers = [];
 
-        // Insert data into the database
-        foreach ($SeatNumbers as $SeatNumber) {
-            $sql = "INSERT INTO bookings (HallMovieID, SeatNumber, bookingTime, paymentStatus) VALUES ('$HallMovieID', '$SeatNumber', '$bookingTime', '$paymentStatus')";
-            if (mysqli_query($conn, $sql)) {
-                $successSeatNumbers[] = $SeatNumber; // Add successfully inserted seat number to the array
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
-        }
+// Insert data into the database
+foreach ($SeatNumbers as $SeatNumber) {
+    $sql = "INSERT INTO bookings (HallMovieID, SeatNumber, bookingDate, bookingTime, paymentStatus) VALUES ('$HallMovieID', '$SeatNumber', '$bookingDate', '$bookingTime', '$paymentStatus')";
+    if (mysqli_query($conn, $sql)) {
+        $successSeatNumbers[] = $SeatNumber; // Add successfully inserted seat number to the array
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+}
 
         // Display the alert message with the successfully inserted seat numbers
         if (!empty($successSeatNumbers)) {
