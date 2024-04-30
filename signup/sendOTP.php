@@ -4,7 +4,7 @@ include('smtp/PHPMailerAutoload.php');
 $recv_email = $_GET['email'];
 $user_type = $_GET['user_type'];
 
-
+//5 digit OTP
 $otp = rand(100000, 999999);
 $receiverEmail = $recv_email ;   //"mdi52660@gmail.com";
 $subject = "Email Verification";
