@@ -1,8 +1,8 @@
 <?php
-   session_start();
-   $user_email = $_SESSION['user_email'];
-   
-   if(!empty($user_email)){
+session_start();
+$user_email = $_SESSION['user_email'];
+
+if (!empty($user_email)) {
 ?>
 
 <!DOCTYPE html>
@@ -47,9 +47,9 @@
         }
 
         th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
         }
 
         th {
@@ -81,70 +81,74 @@
         .menu ul li a:hover {
             color: #ff0000;
         }
+
+        /* Image Styles */
+        .profile-image {
+            display: block;
+            margin: 0 auto;
+            width: 150px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+            margin-bottom: 20px; /* Adjust spacing */
+        }
     </style>
 </head>
 <body>
 
 <div class="menu">
-        <ul>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Orders</a></li>
-            <li><a href="#">Support</a></li>
-            <li><a href="#">Notification</a></li>
-            <li><a href="#">Logout</a></li>
-        </ul>
-    </div>
-    <?php
-        include '../connection.php';
+    <ul>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Notification</a></li>
+        <li><a href="../Logout/logout.php">Logout</a></li>
+    </ul>
+</div>
 
+<?php
+ include '../connection.php';
 
-        // Assuming you have received the user email from the previous page
-       // $user_email ="mayeen52660@gmail.com"; //$_GET['user_email'];
+ // Assuming you have received the user email from the previous page
+ // $user_email ="mayeen52660@gmail.com"; //$_GET['user_email'];
 
-        // Prepare and execute the query to fetch user information based on email
+ // Prepare and execute the query to fetch user information based on email
 
-        echo '<div class="container">';
-        echo '<h2>User Profile</h2>';
+ echo '<div class="container">';
+ echo '<h2>User Profile</h2>';
 
-        // Fetch data from the signup table
-        $sql = "SELECT * FROM usersignup WHERE Email='$user_email'";
-        $result = $conn->query($sql);
+ // Fetch data from the signup table
+ $sql = "SELECT * FROM usersignup WHERE Email='$user_email'";
+ $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            // Output data in a tabular form
-            echo "<table>";
-            echo "<tr><th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>DOB</th><th>Gender</th><th>Address</th></tr>";
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>".$row["UserID"]."</td>";
-                echo "<td>".$row["FullName"]."</td>";
-                echo "<td>".$row["Email"]."</td>";
-                echo "<td>".$row["Phone"]."</td>";
-                echo "<td>".$row["DOB"]."</td>";
-                echo "<td>".$row["Gender"]."</td>";
-                echo "<td>".$row["Address"]."</td>";
-                echo "</tr>";
-               
-            }
-            echo "</table>";
-        } else {
-            echo "0 results";
-        }
+ if ($result->num_rows > 0) {
+     // Output data in a tabular form
+     $row = $result->fetch_assoc();
+     echo '<img src="../signup/signupImages/' . $row['Image'] . '" alt="User Image" style="display: block; margin-left: auto; margin-right: auto; width: 150px; height: 150px; border-radius: 100%;">';
+     echo "<table>";
+     echo "<tr><th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>DOB</th><th>Gender</th><th>Address</th></tr>";
+     echo "<tr>";
+     echo "<td>".$row["UserID"]."</td>";
+     echo "<td>".$row["FullName"]."</td>";
+     echo "<td>".$row["Email"]."</td>";
+     echo "<td>".$row["Phone"]."</td>";
+     echo "<td>".$row["DOB"]."</td>";
+     echo "<td>".$row["Gender"]."</td>";
+     echo "<td>".$row["Address"]."</td>";
+     echo "</tr>";
+     echo "</table>";
+ } else {
+     echo "0 results";
+ }
 
-        echo '</div>';
-    ?>
-   
-    <div class="menu">
-        <ul>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Orders</a></li>
-            <li><a href="#">Support</a></li>
-            <li><a href="#">Notification</a></li>
-            <li><a href="../logout/logout.php">Logout</a></li>
-        </ul>
-    </div>
-    <?php  }else{
-         header('location:../login/login.php');
-    } ?> 
+ echo '</div>';
+?>
+
+<div class="menu">
+ <!-- Your existing menu content -->
+</div>
+<?php  }else{
+  header('location:../login/login.php');
+} ?>
+
 </body>
 </html>

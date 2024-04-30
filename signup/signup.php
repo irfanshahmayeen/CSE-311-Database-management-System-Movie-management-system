@@ -11,7 +11,7 @@ include 'signup.html';
      
 
 // Process signup form data
-if (isset($_POST['email'])) {
+if (isset($_POST['submit'])) {
     $fullname = $_POST["fullname"];
     
     $email = $_POST["email"];
@@ -23,6 +23,22 @@ if (isset($_POST['email'])) {
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
 
+    //for image
+    // Image upload handling
+    $filename = $_FILES['upfile']['name'];
+    $tmploc= $_FILES['upfile']['tmp_name'];
+    $uploc ="signupImages/".$filename;
+
+    if(move_uploaded_file($tmploc,$uploc)){
+         echo "Uploaded.";
+
+    }else{
+        echo "Not uploaded";
+    }
+
+   
+
+
 
     //checking is the any duplicate email or phone number or user id 
     if($user_type === 'user'){
@@ -31,6 +47,10 @@ if (isset($_POST['email'])) {
     }
     else if($user_type==='admin'){
         $checkUser = "SELECT * FROM adminsignup 
+                WHERE Email = '$email' OR Phone = '$phone'  ";
+    }
+    else if($user_type==='employee'){
+        $checkUser = "SELECT * FROM employeesignUp 
                 WHERE Email = '$email' OR Phone = '$phone'  ";
     }
 
@@ -54,14 +74,20 @@ if (isset($_POST['email'])) {
 
     // Construct SQL query
     if($user_type === 'user'){
-    $sql = "INSERT INTO usersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
-                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type')";
+    $sql = "INSERT INTO tempusersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image)
+                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename')";
     }
 
     else if($user_type==='admin') {
-        $sql = "INSERT INTO adminsignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
-                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type')";
+        $sql = "INSERT INTO tempadminsignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image)
+                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename')";
+
  }
+    else if($user_type==='employee') {
+              $joiningDate = date("Y-m-d");
+            $sql = "INSERT INTO tempemployeeSignUp ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,JoiningDate,Image)
+                    VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$joiningdate','$filename')";
+    }
    
 
 
@@ -77,7 +103,9 @@ if (isset($_POST['email'])) {
 
     // For security reasons, don't echo passwords in real application
     $conn->close();
+    header('location:sendOTP.php?email='.$email. '&user_type='.$user_type);
 
 }
 }
+
 ?>

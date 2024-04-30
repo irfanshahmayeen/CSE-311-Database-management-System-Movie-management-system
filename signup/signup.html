@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h2>Sign Up</h2>
-        <form action="signup.php" method="POST" onsubmit="return validateForm()">
+        <form action="signup.php" method="POST"  enctype="multipart/form-data" >
             <input type="text" name="fullname" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="tel" name="phone" placeholder="Phone" required>
@@ -28,12 +28,20 @@
                 <option value="">Select user type</option>
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
+                <option value="employee">Employee</option>
             </select>
+            <!--For Image Upload-->
+            <label for="Upload profile picture">Upload Profile Picture:</label>
+            <input type ="file" name="upfile" id ="image"  onchange="previewImage(event)" ><br>
+            <img id="preview" src="#" alt="Image Preview" style="display: none; max-width: 100%; max-height: 200px; margin-top: 10px;">
+
+
+           
 
             
             <input type="password" name="password" id="password" placeholder="Password" required>
             <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-            <button type="submit">Sign Up</button>
+            <button type="submit" name ="submit">Sign Up</button>
         </form>
         <p id="error_message" style="color: red; display: none;">Passwords do not match. Please try again.</p>
         <p>Already have an account? <a href="../login/login.php">Login</a></p>
@@ -51,6 +59,19 @@
             }
             return true;
         }
+        //live image preview in form 
+        function previewImage(event) {
+        var preview = document.getElementById('preview');
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function() {
+            preview.src = reader.result;
+            preview.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+    }
     </script>
 </body>
 </html>
