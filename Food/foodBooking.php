@@ -1,4 +1,5 @@
 <?php
+/*
 include '../connection.php';
 
 // Get data from AJAX request
@@ -18,4 +19,5 @@ if ($conn->query($sql) === TRUE) {
 
 // Close connection
 $conn->close();
+*/
 ?>

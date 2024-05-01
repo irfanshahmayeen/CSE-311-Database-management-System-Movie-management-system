@@ -1,3 +1,10 @@
+<?php
+session_start();
+$user_email = $_SESSION['user_email'];
+
+if (!empty($user_email)) {
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -237,7 +244,7 @@ $successSeatNumbers = [];
 
 // Insert data into the database
 foreach ($SeatNumbers as $SeatNumber) {
-    $sql = "INSERT INTO bookings (HallMovieID, SeatNumber, bookingDate, bookingTime, paymentStatus) VALUES ('$HallMovieID', '$SeatNumber', '$bookingDate', '$bookingTime', '$paymentStatus')";
+    $sql = "INSERT INTO bookings (HallMovieID,Email ,SeatNumber, bookingDate, bookingTime, paymentStatus) VALUES ('$HallMovieID','$user_email', '$SeatNumber', '$bookingDate', '$bookingTime', '$paymentStatus')";
     if (mysqli_query($conn, $sql)) {
         $successSeatNumbers[] = $SeatNumber; // Add successfully inserted seat number to the array
     } else {
@@ -253,11 +260,15 @@ foreach ($SeatNumbers as $SeatNumber) {
 
         mysqli_close($conn);
         if (!empty($successSeatNumbers)) {
-            echo "<script>window.location = 'booking.php?hallMovieID=$HallMovieID';</script>";
+            echo "<script>window.location = 'booking.php?hallMovieID=$HallMovieID&bookingDate=$bookingDate';</script>";
             exit; // Terminate further execution
         }
     }
     ?>
+
+    <?php  }else{
+  header('location:../login/login.php');
+} ?>
 
 </body>
 </html>

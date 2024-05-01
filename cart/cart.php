@@ -1,3 +1,10 @@
+<?php
+include '../connection.php';
+session_start();
+$user_email = $_SESSION['user_email'];
+if (!empty($user_email)) {
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,23 +110,35 @@
                     }
                 }
 
+               
+
                 // Fetch food data from the database
-                $foodSql = "SELECT foods.FoodID, foods.FoodName, foodbookings.Quantity, foods.FoodPrice FROM foods
-                            INNER JOIN foodbookings ON foods.FoodID = foodbookings.FoodID";
+                $foodSql = "SELECT foods.FoodID, foods.FoodName,foods.FoodImage, foodbookings.Quantity, foods.FoodPrice, foodbookings.Email
+                       FROM foods
+                       INNER JOIN foodbookings ON foods.FoodID = foodbookings.FoodID
+                       WHERE foodbookings.Email = 'imanhowlader321@gmail.com'
+                       ORDER BY foods.FoodPrice";
+
                 $foodResult = $conn->query($foodSql);
 
-                // Fetch movie ticket data from the database
-                $movieSql = "SELECT bookings.booking_id, theatermovie.Title, theatermovie.Image, theatermovie.Category, theatermovie.StartTime, theatermovie.EndTime, theatermovie.Location, theatermovie.TicketPrice, bookings.SeatNumber
-                            FROM bookings 
-                            INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId";
+                $movieSql = "SELECT bookings.booking_id, theatermovie.Title, theatermovie.Image, theatermovie.Category, theatermovie.StartTime, theatermovie.EndTime, theatermovie.Location, theatermovie.TicketPrice, bookings.SeatNumber, bookings.Email
+                FROM bookings
+                INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId
+                WHERE bookings.Email = '$user_email'
+                ORDER BY bookings.SeatNumber";
+                
                 $movieResult = $conn->query($movieSql);
 
                 $totalPrice = 0;
 
                 // Display food items
+
+                echo "<h1>Your Ordered Food:</h1>";
+
                 if ($foodResult->num_rows > 0) {
                     while($row = $foodResult->fetch_assoc()) {
                         echo "<div class='order-info'>";
+                        echo "<img src='../movieadmin/foodimages/".$row["FoodImage"]."' alt='".$row["FoodName"]."'>";
                         echo "<p><strong>".$row["FoodName"]."</strong> - Quantity: <span id='quantity_".$row["FoodID"]."'>".$row["Quantity"]."</span> - Unit Price: $".$row["FoodPrice"]." - Subtotal:    "."
                         <span class='subtotal' id='subtotal_".$row["FoodID"]."'>$".($row["Quantity"] * $row["FoodPrice"])."</span></p>";
                         // Add buttons for incrementing and decrementing quantity
@@ -132,6 +151,8 @@
                     }
                 }
 
+
+                echo "<h1>Your Booked Movie and Seats:</h1>";
                 // Display movie tickets
                 if ($movieResult->num_rows > 0) {
                     while($row = $movieResult->fetch_assoc()) {
@@ -305,5 +326,9 @@ function simulateEnterKeyPress() {
 
 
     </script>
+
+<?php  }else{
+  header('location:../login/login.php');
+} ?>
 </body>
 </html>
