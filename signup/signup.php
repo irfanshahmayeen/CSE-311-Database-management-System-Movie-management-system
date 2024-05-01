@@ -35,7 +35,13 @@ if (isset($_POST['submit'])) {
     }else{
         echo "Not uploaded";
     }
+     
 
+    $today = date("Y-m-d");
+    if ($dob >= $today) {
+        echo '<script>alert("Date of birth must be before today\'s date.");</script>';
+        exit;
+    }
    
 
 
@@ -74,19 +80,19 @@ if (isset($_POST['submit'])) {
 
     // Construct SQL query
     if($user_type === 'user'){
-    $sql = "INSERT INTO tempusersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image)
-                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename')";
+    $sql = "INSERT INTO tempusersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image,OTP)
+                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename','invalid')";
     }
 
     else if($user_type==='admin') {
-        $sql = "INSERT INTO tempadminsignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image)
-                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename')";
+        $sql = "INSERT INTO tempadminsignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,Image,OTP)
+                        VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$filename','invalid')";
 
  }
     else if($user_type==='employee') {
               $joiningDate = date("Y-m-d");
-            $sql = "INSERT INTO tempemployeeSignUp ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,JoiningDate,Image)
-                    VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$joiningdate','$filename')";
+            $sql = "INSERT INTO tempemployeeSignUp ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type,JoiningDate,Image,OTP)
+                    VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type','$joiningdate','$filename','invalid')";
     }
    
 
