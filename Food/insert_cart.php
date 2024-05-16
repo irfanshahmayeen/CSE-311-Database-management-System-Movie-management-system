@@ -24,7 +24,7 @@ if (isset($_POST['foodID']) && isset($_POST['quantity']) ) {
     $bookingTime = $_POST['bookingTime']; // No need to sanitize since it's a datetime string
 
     // Prepare and execute the SQL query to insert into the foodBookings table
-    $sql =  "INSERT INTO foodBookings (FoodID,Email,Quantity, bookingTime) VALUES ('$foodID', '$user_email','$quantity', '$bookingTime')";
+    $sql =  "INSERT INTO foodBookings (FoodID,Email,Quantity, bookingTime,PaymentStatus) VALUES ('$foodID', '$user_email','$quantity', '$bookingTime','unpaid')";
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
       } else {

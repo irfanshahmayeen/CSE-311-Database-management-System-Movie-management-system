@@ -12,6 +12,87 @@ if (!empty($user_email)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <style>
+        :root {
+    --text-color: #fff;
+    --bg-color: #F9E3E3;
+    --main-color: #04f929;
+    --h1-font: 6rem;
+    --h2-font: 3rem;
+    --p-font: 1rem;
+    --card-color: #137db1;
+}
+
+        header {
+    position:relative;
+    background: #000;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    background: transparent;
+    padding: 30px 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.5s ease;
+}
+
+.logo {
+    font-size: 33px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+span {
+    color: var(--main-color);
+}
+
+.navbar {
+    display: flex;
+}
+
+.navbar a {
+    color: var(--text-color);
+    font-size: var(--p-font);
+    font-weight: bold;
+    margin: 15px 22px;
+    transition: all 0.5s ease;
+}
+
+.navbar a:hover {
+    color: var(--main-color);
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar {
+    margin-right: 20px;
+}
+
+.search-bar input[type=text] {
+    padding: 8px;
+    border: none;
+    font-size: 17px;
+    border-radius: 5px;
+}
+
+.submit-button button {
+    background-color: var(--main-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.submit-button button:hover {
+    background-color: var(--main-color);
+}
+
         /* General Styles */
         body {
             font-family: Arial, sans-serif;
@@ -19,6 +100,7 @@ if (!empty($user_email)) {
             padding: 0;
             background: url('https://cdn.dribbble.com/users/1646263/screenshots/3549733/camera_build_-_loop_1.gif') no-repeat center center fixed;
             background-size: cover;
+            
         }
 
         /* Container Styles */
@@ -26,9 +108,10 @@ if (!empty($user_email)) {
             max-width: 600px;
             margin: 50px auto;
             padding: 40px;
-            background-color: rgba(255, 255, 255, 0.8); /* Transparent white background */
+            background-color: rgba(255, 255, 255, 0.3); /* Transparent white background */
             border-radius: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            
         }
 
         /* Heading Styles */
@@ -37,6 +120,7 @@ if (!empty($user_email)) {
             margin-bottom: 20px;
             color: #ff0000;
             text-align: center;
+            
         }
 
         /* Table Styles */
@@ -44,16 +128,26 @@ if (!empty($user_email)) {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            
+           
+            
+
         }
 
         th, td {
             padding: 5px;
             text-align: center;
-            border-bottom: 2px solid #ddd;
+            border-bottom: px solid #ddd;
+            
+            
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #ffff80;
+           
+            
+            
+            
         }
 
         /* Menu Styles */
@@ -79,7 +173,7 @@ if (!empty($user_email)) {
         }
 
         .menu ul li a:hover {
-            color: #ff0000;
+            color: #00ff00;
         }
 
         /* Image Styles */
@@ -89,22 +183,33 @@ if (!empty($user_email)) {
             width: 150px; /* Adjust size as needed */
             height: auto; /* Maintain aspect ratio */
             border-radius: 50%; /* Make it circular */
-            margin-bottom: 20px; /* Adjust spacing */
+            margin-bottom: 150px; /* Adjust spacing */
         }
     </style>
 </head>
 <body>
 
-<div class="menu">
-    <ul>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Orders</a></li>
-        <li><a href="#">Support</a></li>
-        <li><a href="#">Notification</a></li>
-        <li><a href="../Logout/logout.php">Logout</a></li>
+<header>
+    <a href="homepage.php" class="logo">IZI <span>Movie</span></a>
+    <ul class="navbar">
+        <li><a href="../test/homepage.php">Home</a></li>
+        <li><a href="../movieadmin/AdminShowMovieList.php">Movies</a></li>
+        <li><a href="#">Watchlist</a></li>
+        <li><a href="#">Directors</a></li>
+        <li><a href="#">Top10</a></li>
+        <li><a href="#">Trailer</a></li>
+        <li><a href="#">Theater</a></li>
     </ul>
-</div>
-
+    <form class="search-form" action="/search" method="GET">
+        <div class="search-bar">
+            <input type="text" name="query" placeholder="Search...">
+        </div>
+        <div class="submit-button">
+            <button type="submit">Search</button>
+        </div>
+    </form>
+    
+</header>
 <?php
  include '../connection.php';
 
@@ -149,6 +254,14 @@ if (!empty($user_email)) {
 <?php  }else{
   header('location:../login/login.php');
 } ?>
-
+<div class="menu">
+    <ul>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Notification</a></li>
+        <li><a href="../Logout/logout.php">Logout</a></li>
+    </ul>
+</div>
 </body>
 </html>

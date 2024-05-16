@@ -5,6 +5,7 @@
     list-style: none;
     text-decoration: none;
     border: none;
+    
     outline: none;
     scroll-behavior: smooth;
     font-family: 'open sans', sans-serif;
@@ -96,22 +97,38 @@ span {
 }
 
 .login-button {
-    background-color: var(--main-color);
+    background-color:var(--main-color);
     color: white;
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 17px;
+    text-decoration: none; 
+    display: flex;
+    align-items: center;
 }
+
+.login-button i {
+    margin-right: 5px; 
+}
+
+.login-button img {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    margin-right: 5px; 
+    background:none;
+}
+
 
 /* Front Image Slide */
 
 .imgSlider {
-    width: 100%;
-    height: 600px;
+    width: 75%;
+    height: 400px;
     top: 100px;
-    left: 0%;
+    left: 11%;
     position: relative;
     background-image: url("images/SlideShow/serge-kutuzov-meqVd5zwylI-unsplash.jpg");
     background-size: 100% 100%;
@@ -229,7 +246,7 @@ input[type="radio"] {
 /* Footer Container */
 .footerContainer {
     background-color: var(--bg-color);
-    position:relative;
+    position: relative;
     bottom: 0;
     width: 100%;
     padding-bottom: 20px;

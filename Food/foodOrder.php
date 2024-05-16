@@ -131,6 +131,40 @@
             border-radius: 5px;
             display: none; /* Initially hide the side view */
         }
+        #addpayLink {
+        display: inline-block;
+        background-color:darkcyan;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 17px;
+        text-decoration: none;
+        margin-left: 10px; /* Add some space between the buttons */
+    }
+
+    #addpayLink:hover {
+        background-color: #9C94BC;
+    }
+
+
+    #addmLink {
+        display: inline-block;
+        background-color:darkcyan;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 17px;
+        text-decoration: none;
+        margin-left: 10px; /* Add some space between the buttons */
+    }
+
+    #addmLink:hover {
+        background-color: #9C94BC;
+    }
     </style>
 </head>
 <body>
@@ -169,7 +203,13 @@
         
     </div>
     <div>
+
+
+
+
         <h1>Food List</h1>
+        <a href="../cart/cart.php" id="addpayLink">Pay card</a>
+        <a href="../Theater/TicketBooking/ticket.php"id="addmLink">Add Movie</a>
         <table>
             <thead>
             <tr>
@@ -182,6 +222,7 @@
             </tr>
             </thead>
             <tbody id="food-list">
+                
                 <?php
                 include '../connection.php'; // Assuming this file includes database connection details
 
@@ -220,9 +261,12 @@
     </div>
     <div class="side-view" id="food-side-view">
     <h2>Selected Food</h2>
+    
     <div id="selected-food-list"></div>
     <div id="total-food-price">Total Food Price: $0</div>
     <button onclick="addAllToCart()">Add to Cart</button>
+
+    
 </div>
 </div>
 

@@ -73,6 +73,23 @@ if (!empty($user_email)) {
             border: 2px solid #ccc; /* Add a border around the image */
             border-radius: 4px; /* Add some border radius for rounded corners */
         }
+
+        #addpayLink {
+        display: inline-block;
+        background-color:darkcyan;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 17px;
+        text-decoration: none;
+        margin-left: 10px; /* Add some space between the buttons */
+    }
+
+    #addpayLink:hover {
+        background-color: #9C94BC;
+    }
     </style>
 </head>
 <body>
@@ -116,15 +133,15 @@ if (!empty($user_email)) {
                 $foodSql = "SELECT foods.FoodID, foods.FoodName,foods.FoodImage, foodbookings.Quantity, foods.FoodPrice, foodbookings.Email
                        FROM foods
                        INNER JOIN foodbookings ON foods.FoodID = foodbookings.FoodID
-                       WHERE foodbookings.Email = 'imanhowlader321@gmail.com'
+                       WHERE foodbookings.Email = '$user_email' AND foodbookings.PaymentStatus = 'unpaid'
                        ORDER BY foods.FoodPrice";
 
                 $foodResult = $conn->query($foodSql);
 
                 $movieSql = "SELECT bookings.booking_id, theatermovie.Title, theatermovie.Image, theatermovie.Category, theatermovie.StartTime, theatermovie.EndTime, theatermovie.Location, theatermovie.TicketPrice, bookings.SeatNumber, bookings.Email
                 FROM bookings
-                INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId
-                WHERE bookings.Email = '$user_email'
+                INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId 
+                WHERE bookings.Email = '$user_email' AND bookings.PaymentStatus = 'unpaid'
                 ORDER BY bookings.SeatNumber";
                 
                 $movieResult = $conn->query($movieSql);
@@ -189,8 +206,23 @@ if (!empty($user_email)) {
         <form id = "pdfForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <input type="hidden" name="totalPrice" value="<?php echo $totalPrice; ?>">
             <button type="submit">Download PDF</button>
+            <a href="../cart/payment.php?total_amount=<?php echo $totalPrice; ?>" id="addpayLink">Payment</a>
+
         </form>
+       
     </div>
+    
+
+
+
+
+    <a href="../cart/cart.php?" id="addpayLink">Pay card</a>
+
+
+
+
+
+  
 
     <script>
         // JavaScript functions for updating quantity
@@ -330,5 +362,6 @@ function simulateEnterKeyPress() {
 <?php  }else{
   header('location:../login/login.php');
 } ?>
+
 </body>
 </html>
