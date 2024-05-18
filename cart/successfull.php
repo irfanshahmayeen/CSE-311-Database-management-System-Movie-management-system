@@ -1,5 +1,7 @@
 <?php
+ob_start();
 include '../connection.php';
+ob_end_clean();
 session_start();
 $user_email = $_SESSION['user_email'];
 if (!empty($user_email)) {
@@ -9,15 +11,44 @@ if (!empty($user_email)) {
 <?php
      $transactionID = uniqid('txn', true);
 
-           $sql1 = "SELECT * FROM foodbookings WHERE Email ='$user_email' AND PaymentStatus ='unpaid'";
-           $result1  = $conn->query($sql1);
-           if(mysqli_num_rows($result1) > 0){
-            
+     $foodSql = "SELECT booking_id FROM foodbookings 
+     WHERE Email = '$user_email' AND PaymentStatus = 'unpaid'
+     ORDER BY booking_id";
+     $foodResult = $conn->query($foodSql);
 
-     INSERT INTO orderhistory (Email, TranxactionID, ProductType, Product_Name, Quantity, OrderDate, PaymentStatus)
-     VALUES ('$user_email', '$transactionID', 'food', 'Laptop', 1, NOW(), 'Paid'); 
+     if(mysqli_num_rows($foodResult) > 0){
+
+        while($row = $foodResult->fetch_assoc()) {
+
+         $sql1 = "INSERT INTO orderhistory (Email, TransactionID, ProductType, TypeOrderID, OrderTime, PaymentStatus)
+         VALUES ('$user_email', '$transactionID', 'food', '".$row["booking_id"]."', NOW(), 'Paid')";
+         $conn->query($sql1); 
+
+        }
      
      }
+    
+
+     $movieSql = "SELECT booking_id FROM bookings
+     WHERE Email = '$user_email' AND PaymentStatus = 'unpaid'
+     ORDER BY bookings.SeatNumber";
+     
+     $movieResult = $conn->query($movieSql);
+
+     if(mysqli_num_rows($movieResult) > 0){
+
+        while($row = $movieResult->fetch_assoc()) {
+
+         $sql1 = "INSERT INTO orderhistory (Email, TransactionID, ProductType, TypeOrderID, OrderTime, PaymentStatus)
+         VALUES ('$user_email', '$transactionID', 'movie','".$row["booking_id"]."', NOW(), 'Paid')";
+         $conn->query($sql1); 
+
+        }
+     
+     }
+
+
+    
 
 
 
@@ -28,13 +59,15 @@ $query2 = "UPDATE foodbookings SET PaymentStatus = 'paid' WHERE Email = '$user_e
 
 // Execute the queries
 if ($conn->query($query1) === TRUE) {
-    echo "Record updated successfully in bookings.";
+  
+    //echo "<script> alert('Record updated successfully in bookings.') </script>";
 } else {
     echo "Error updating record in bookings: " . $mysqli->error;
 }
 
 if ($conn->query($query2) === TRUE) {
-    echo "Record updated successfully in foodbookings.";
+   // echo "<script> alert('Record updated successfully in foodbookings.') </script>";
+  //  echo "Record updated successfully in foodbookings.";
 } else {
     echo "Error updating record in foodbookings: " . $mysqli->error;
 }

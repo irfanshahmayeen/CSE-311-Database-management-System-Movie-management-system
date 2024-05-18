@@ -16,7 +16,18 @@
             <input type="text" id="title" name="title" required><br><br>
             
             <label for="category">Category:</label>
-            <input type="text" id="category" name="category" required><br><br>
+            <!--<input type="text" id="category" name="category" required><br><br> -->
+            <select  name="category" id="category">
+                <?php
+                
+                $categorys = mysqli_query($conn, "SELECT * FROM hallmoviecategory");
+                while ($category = mysqli_fetch_assoc($categorys)) {
+                    echo "<option value='" . $category['category_name'] . "'>" . $category['category_name'] . "</option>";
+                }
+                ?>
+                
+                
+    </select><br><br>   
             
             <label for="startTime">Start Time:</label>
             <input type="time" id="startTime" name="startTime" required><br><br>
