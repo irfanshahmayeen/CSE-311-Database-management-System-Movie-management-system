@@ -4,7 +4,9 @@ $user_email = $_SESSION['user_email'];
 
 if (!empty($user_email)) {
     // Database connection
+    ob_start();
     include '../connection/connection.php';
+    ob_end_clean();
 
     // Handle rating submission
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['rating'], $_POST['movie_id'], $_POST['comment'])) {

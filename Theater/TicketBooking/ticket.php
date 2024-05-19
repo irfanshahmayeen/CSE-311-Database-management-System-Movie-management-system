@@ -223,7 +223,7 @@ span {
             // Loop through each movie entry
             while($row = mysqli_fetch_assoc($result)) {
                 ?>
-                <tr>
+                <tr>  
                     <td>
                         <!-- Movie name with a link -->
                         <a href="#" onclick="selectMovie('<?php echo $row['Title']; ?>')"><?php echo $row['Title']; ?></a>

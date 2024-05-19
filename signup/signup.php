@@ -109,7 +109,7 @@ if (isset($_POST['submit'])) {
 
     // For security reasons, don't echo passwords in real application
     $conn->close();
-    header('location:sendOTP.php?email='.$email. '&user_type='.$user_type);
+    header('location:sendOTP.php?email='.$email. ' & user_type='.$user_type);
 
 }
 }

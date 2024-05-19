@@ -89,7 +89,7 @@ body {
                // echo '<p><strong>Director:</strong> <a href="show.php?directorid=' . urlencode($row["DirectorID"]) . '">' . htmlspecialchars($row["Director"]) . '</a></p>';
                 echo '<p><strong>Release Date:</strong> ' . htmlspecialchars($row["Release_date"]) . '</p>';
                 echo '<p><strong>Duration:</strong> ' . htmlspecialchars($row["Duration"]) . ' mins</p>';
-                echo '<p><strong>Language:</strong> <a href="show.php?LanguageID=' . urlencode($row["Language"]) . '">' . htmlspecialchars($row["Language"]) . '</a></p>';
+                echo '<p><strong>Language:</strong> <a href="languageclickShow.php?language_id=' . urlencode($row["Language"]) . '">' . htmlspecialchars($row["Language"]) . '</a></p>';
                 echo '<p><strong>Description:</strong> ' . htmlspecialchars($row["Description"]) . '</p>';
                 echo '<p><strong>Budget:</strong> $' . htmlspecialchars($row["Budget"]) . '</p>';
 

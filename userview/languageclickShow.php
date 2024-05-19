@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Genre Details</title>
+<title>Language Details</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -15,23 +15,26 @@ body {
     padding: 20px;
 }
 
-.genre-details {
+.language {
     border: 1px solid #ccc;
+    margin-bottom: 20px;
     padding: 20px;
     overflow: auto;
 }
 
-.genre-details h2 {
+.language-details {
+    width: 100%;
+}
+
+.language h2 {
     margin-top: 0;
 }
 
-.genre-details p {
+.language p {
     margin: 5px 0;
 }
 
-.genre-details a {
-    display: block;
-    margin-top: 10px;
+.language a {
     color: blue;
     text-decoration: none;
 }
@@ -43,29 +46,31 @@ body {
     <?php
     // Include the connection file
     ob_start();
-    include ('../connection.php');
+    include('../connection.php');
     ob_end_clean();
-    // Check if genreid is set and is a valid integer
-    if (isset($_GET['genreid'])) {
-        $genreid = $_GET['genreid'];
 
-        // Fetch genre details
-        $sql = "SELECT * FROM genres WHERE genre_name = '$genreid'";
+    // Check if language_id is set
+    if (isset($_GET['language_id'])) {
+        $language_id = $_GET['language_id'];
+
+        // Fetch language details
+        $sql = "SELECT * FROM languages WHERE language_name = '$language_id'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-
-            echo '<div class="genre-details">';
-            echo '<h2>' . htmlspecialchars($row["genre_name"]) . '</h2>';
+            echo '<div class="language">';
+            echo '<div class="language-details">';
+            echo '<h2>' . htmlspecialchars($row["language_name"]) . '</h2>';
             echo '<p><strong>Description:</strong> ' . htmlspecialchars($row["description"]) . '</p>';
-            echo '<a href="genremovie.php?genre_name=' . urlencode($genreid) . '">Click to see movies of this genre</a>';
+            echo '<a href="languagemovie.php?language_name=' . urlencode($row["language_name"]) . '">Click to see movies in this language</a>';
+            echo '</div>';
             echo '</div>';
         } else {
-            echo "<p>Genre not found.</p>";
+            echo "<p>Language not found.</p>";
         }
     } else {
-        echo "<p>Invalid genre specified.</p>";
+        echo "<p>No language specified.</p>";
     }
 
     $conn->close();
