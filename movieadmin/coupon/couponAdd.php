@@ -92,6 +92,14 @@
                 <input type="number" step="0.01" id="minimum_order" name="minimum_order" required>
             </div>
             <div class="form-group">
+                <label for="usage_limit">Usage Limit:</label>
+                <input type="number" id="usage_limit" name="usage_limit" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="validity_duration">Validity Duration (in days):</label>
+                <input type="number" id="validity_duration" name="validity_duration" value="1" required>
+            </div>
+            <div class="form-group">
                 <button type="submit" name="submit">Add Coupon</button>
             </div>
         </form>
@@ -105,6 +113,8 @@
             $expiry_date = $_POST['expiry_date'];
             $description = $_POST['description'];
             $minimum_order = $_POST['minimum_order'];
+            $usage_limit = $_POST['usage_limit'];
+            $validity_duration = $_POST['validity_duration'];
 
             // Check if the coupon code already exists
             $checkSql = "SELECT * FROM Coupon WHERE code='$code'";
@@ -113,8 +123,8 @@
             if ($checkResult->num_rows > 0) {
                 echo "<div class='message error'>Error: Coupon code already exists.</div>";
             } else {
-                $sql = "INSERT INTO Coupon (code, discount, expiry_date, description, minimum_order) 
-                        VALUES ('$code', $discount, '$expiry_date', '$description', $minimum_order)";
+                $sql = "INSERT INTO Coupon (code, discount, expiry_date, description, minimum_order, usage_limit, validity_duration) 
+                        VALUES ('$code', $discount, '$expiry_date', '$description', $minimum_order, $usage_limit, $validity_duration)";
 
                 if ($conn->query($sql) === TRUE) {
                     echo "<div class='message success'>Coupon added successfully!</div>";

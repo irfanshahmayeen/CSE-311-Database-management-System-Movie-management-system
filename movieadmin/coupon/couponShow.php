@@ -79,6 +79,8 @@
                     <th>Expiry Date</th>
                     <th>Description</th>
                     <th>Minimum Order</th>
+                    <th>Usage Limit</th> <!-- New column -->
+                    <th>Validity Duration (Days)</th> <!-- New column -->
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -98,6 +100,8 @@
                         echo "<td>" . $row['expiry_date'] . "</td>";
                         echo "<td>" . $row['description'] . "</td>";
                         echo "<td>" . $row['minimum_order'] . "</td>";
+                        echo "<td>" . $row['usage_limit'] . "</td>"; // Output usage_limit column
+                        echo "<td>" . $row['validity_duration'] . "</td>"; // Output validity_duration column
                         echo "<td class='actions'>
                                 <a class='btn btn-update' href='couponUpdate.php?id=" . $row['coupon_id'] . "'>Update</a>
                                 <a class='btn btn-delete' href='couponDelete.php?id=" . $row['coupon_id'] . "'>Delete</a>
@@ -105,7 +109,7 @@
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='7'>No coupons found</td></tr>";
+                    echo "<tr><td colspan='9'>No coupons found</td></tr>";
                 }
 
                 $conn->close();
