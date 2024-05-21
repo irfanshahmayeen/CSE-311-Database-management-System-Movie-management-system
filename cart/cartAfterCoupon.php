@@ -41,7 +41,6 @@ if (!empty($user_email)) {
         .logo {
             width: 150px;
             height: 150px;
-            /* Add styling for your logo */
         }
 
         .info {
@@ -67,11 +66,12 @@ if (!empty($user_email)) {
         button:hover {
             background-color: #ff0000;
         }
+
         img {
-            max-width: 100px; /* Set the maximum width of the image */
-            max-height: 100px; /* Set the maximum height of the image */
-            border: 2px solid #ccc; /* Add a border around the image */
-            border-radius: 4px; /* Add some border radius for rounded corners */
+            max-width: 100px;
+            max-height: 100px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
         }
 
         #addpayLink {
@@ -84,7 +84,7 @@ if (!empty($user_email)) {
             cursor: pointer;
             font-size: 17px;
             text-decoration: none;
-            margin-left: 10px; /* Add some space between the buttons */
+            margin-left: 10px;
         }
 
         #addpayLink:hover {
@@ -103,9 +103,12 @@ if (!empty($user_email)) {
                 <?php
                 include '../connection.php';
 
+                $discountPrice = $_GET['discount_price'];
+                $totalPrice = $_GET['total_price'] - $discountPrice;
+
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Handle food item deletion
-                    if(isset($_POST['delete_food'])) {
+                    if (isset($_POST['delete_food'])) {
                         $foodID = $_POST['foodID'];
                         $deleteFoodSql = "DELETE FROM foodbookings WHERE FoodID = $foodID";
                         if ($conn->query($deleteFoodSql) === TRUE) {
@@ -114,9 +117,9 @@ if (!empty($user_email)) {
                             echo "Error deleting food item: " . $conn->error;
                         }
                     }
-                    
+
                     // Handle movie ticket deletion
-                    if(isset($_POST['delete_movie'])) {
+                    if (isset($_POST['delete_movie'])) {
                         $bookingID = $_POST['bookingID'];
                         $deleteMovieSql = "DELETE FROM bookings WHERE booking_id = $bookingID";
                         if ($conn->query($deleteMovieSql) === TRUE) {
@@ -137,50 +140,46 @@ if (!empty($user_email)) {
                 $foodResult = $conn->query($foodSql);
 
                 $movieSql = "SELECT bookings.booking_id, theatermovie.Title, theatermovie.Image, theatermovie.Category, theatermovie.StartTime, theatermovie.EndTime, theatermovie.Location, theatermovie.TicketPrice, bookings.SeatNumber, bookings.Email
-                             FROM bookings
-                             INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId 
-                             WHERE bookings.Email = '$user_email' AND bookings.PaymentStatus = 'unpaid'
-                             ORDER BY bookings.SeatNumber";
-                
+                            FROM bookings
+                            INNER JOIN theatermovie ON bookings.HallMovieID = theatermovie.HallMovieId 
+                            WHERE bookings.Email = '$user_email' AND bookings.PaymentStatus = 'unpaid'
+                            ORDER BY bookings.SeatNumber";
+
                 $movieResult = $conn->query($movieSql);
 
-                $totalPrice = 0;
-
                 // Display food items
-
                 echo "<h1>Your Ordered Food:</h1>";
 
                 if ($foodResult->num_rows > 0) {
-                    while($row = $foodResult->fetch_assoc()) {
+                    while ($row = $foodResult->fetch_assoc()) {
                         echo "<div class='order-info'>";
-                        echo "<img src='../movieadmin/foodimages/".$row["FoodImage"]."' alt='".$row["FoodName"]."'>";
-                        echo "<p><strong>".$row["FoodName"]."</strong> - Quantity: <span id='quantity_".$row["FoodID"]."'>".$row["Quantity"]."</span> - Unit Price: $".$row["FoodPrice"]." - Subtotal: <span class='subtotal' id='subtotal_".$row["FoodID"]."'>$".($row["Quantity"] * $row["FoodPrice"])."</span></p>";
+                        echo "<img src='../movieadmin/foodimages/" . $row["FoodImage"] . "' alt='" . $row["FoodName"] . "'>";
+                        echo "<p><strong>" . $row["FoodName"] . "</strong> - Quantity: <span id='quantity_" . $row["FoodID"] . "'>" . $row["Quantity"] . "</span> - Unit Price: $" . $row["FoodPrice"] . " - Subtotal: <span class='subtotal' id='subtotal_" . $row["FoodID"] . "'>$" . ($row["Quantity"] * $row["FoodPrice"]) . "</span></p>";
                         // Add buttons for incrementing and decrementing quantity
-                        echo "<button onclick='incrementQuantity(".$row["FoodID"].", ".$row["FoodPrice"].")'>+</button>";
-                        echo "<button onclick='decrementQuantity(".$row["FoodID"].", ".$row["FoodPrice"].")'>-</button>";
+                        echo "<button onclick='incrementQuantity(" . $row["FoodID"] . ", " . $row["FoodPrice"] . ")'>+</button>";
+                        echo "<button onclick='decrementQuantity(" . $row["FoodID"] . ", " . $row["FoodPrice"] . ")'>-</button>";
                         // Add delete button for food item
-                        echo "<form method='post'><input type='hidden' name='foodID' value='".$row["FoodID"]."'><button type='submit' name='delete_food'>Delete</button></form>";
+                        echo "<form method='post'><input type='hidden' name='foodID' value='" . $row["FoodID"] . "'><button type='submit' name='delete_food'>Delete</button></form>";
                         echo "</div>";
-                        $totalPrice += ($row["Quantity"] * $row["FoodPrice"]);
                     }
                 }
 
                 echo "<h1>Your Booked Movie and Seats:</h1>";
                 // Display movie tickets
                 if ($movieResult->num_rows > 0) {
-                    while($row = $movieResult->fetch_assoc()) {
+                    while ($row = $movieResult->fetch_assoc()) {
                         echo "<div class='order-info'>";
-                        echo "<img src='../movieadmin/images/".$row["Image"]."' alt='".$row["Title"]."'>";
-                        echo "<p><strong>".$row["Title"]."</strong> - Seat Number: ".$row["SeatNumber"]." - Category: ".$row["Category"]." - Time: ".$row["StartTime"]." to ".$row["EndTime"]." - Location: ".$row["Location"]." - Price: $".$row["TicketPrice"]."</p>";
+                        echo "<img src='../movieadmin/images/" . $row["Image"] . "' alt='" . $row["Title"] . "'>";
+                        echo "<p><strong>" . $row["Title"] . "</strong> - Seat Number: " . $row["SeatNumber"] . " - Category: " . $row["Category"] . " - Time: " . $row["StartTime"] . " to " . $row["EndTime"] . " - Location: " . $row["Location"] . " - Price: <span class='movie-price'>$" . $row["TicketPrice"] . "</span></p>";
                         // Add delete button for movie ticket
-                        echo "<form method='post'><input type='hidden' name='bookingID' value='".$row["booking_id"]."'><button type='submit' name='delete_movie'>Delete</button></form>";
+                        echo "<form method='post'><input type='hidden' name='bookingID' value='" . $row["booking_id"] . "'><button type='submit' name='delete_movie'>Delete</button></form>";
                         echo "</div>";
-                        $totalPrice += $row["TicketPrice"];
                     }
                 }
 
                 // Output total price
                 echo "<p><strong>Total Price: <span id='totalPrice'>$totalPrice</span></strong></p>";
+                echo "<p><strong>Total Your got discount: <span id='discountPrice'>$discountPrice</span></strong></p>";
                 ?>
 
             </div>
@@ -190,9 +189,9 @@ if (!empty($user_email)) {
             // Fetch data from the database again to get the current state
             $result = $conn->query($foodSql);
             if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<input type='hidden' name='foodID[]' value='".$row["FoodID"]."'>";
-                    echo "<input type='hidden' name='quantity[]' value='".$row["Quantity"]."'>";
+                while ($row = $result->fetch_assoc()) {
+                    echo "<input type='hidden' name='foodID[]' value='" . $row["FoodID"] . "'>";
+                    echo "<input type='hidden' name='quantity[]' value='" . $row["Quantity"] . "'>";
                 }
             }
             ?>
@@ -202,25 +201,19 @@ if (!empty($user_email)) {
         <form id="pdfForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <input type="hidden" name="totalPrice" value="<?php echo $totalPrice; ?>">
             <button type="submit">Download PDF</button>
-            <a href="../cart/payment.php?total_amount=<?php echo $totalPrice; ?>" id="addpayLink">Payment</a>
+            <a href="payment.php?total_amount=<?php echo $totalPrice; ?>" id="addpayLink">Payment</a>
         </form>
-
-        <!-- Coupon form -->
-        <form id="couponForm" action="couponCheck.php" method="get">
-            <input type="hidden" name="totalPrice" value="<?php echo $totalPrice; ?>">
-            <input type="text" name="coupon_code" placeholder="Enter Coupon Code">
-            <button type="submit">Apply Coupon</button>
-        </form>
+        <a href="../cart/cart.php?" id="addpayLink">Pay card</a>
     </div>
 
-    <a href="../cart/cart.php?" id="addpayLink">Pay card</a>
-
     <script>
-        // JavaScript functions for updating quantity
         function updateSubtotalAndTotalPrice(foodID, quantity, unitPrice) {
             var quantityElement = document.getElementById('quantity_' + foodID);
             var subtotalElement = document.getElementById('subtotal_' + foodID);
             var totalElement = document.getElementById('totalPrice');
+            var discountElement = document.getElementById('discountPrice');
+            var originalTotal = parseFloat(totalElement.innerText);
+            var discount = parseFloat(discountElement.innerText);
 
             // Update quantity
             quantityElement.innerText = quantity;
@@ -235,23 +228,27 @@ if (!empty($user_email)) {
             totalPriceElements.forEach(function(element) {
                 totalPrice += parseFloat(element.innerText.replace('$', ''));
             });
-            totalElement.innerText = '$' + totalPrice.toFixed(2);
 
-            // You can add AJAX call here to update quantity in the database
+            // Include movie prices in the total price calculation
+            var moviePriceElements = document.querySelectorAll('.movie-price');
+            moviePriceElements.forEach(function(element) {
+                totalPrice += parseFloat(element.innerText.replace('$', ''));
+            });
+
+            var newTotalPrice = totalPrice - discount;
+            totalElement.innerText = newTotalPrice.toFixed(2);
         }
 
-        function updateQuantity(foodID, newQuantity) {
-            // Send AJAX request to update_quantity.php
+        function updateQuantity(foodID, newQuantity, unitPrice) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "update_quantity.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
-                        // Quantity updated successfully, redirect to cart.php
-                        window.location.href = "cart.php";
+                        // Quantity updated successfully
+                        updateSubtotalAndTotalPrice(foodID, newQuantity, unitPrice);
                     } else {
-                        // Error updating quantity
                         console.error("Error updating quantity: " + xhr.responseText);
                     }
                 }
@@ -263,7 +260,7 @@ if (!empty($user_email)) {
             var quantityElement = document.getElementById('quantity_' + foodID);
             var currentQuantity = parseInt(quantityElement.innerText);
             var newQuantity = currentQuantity + 1;
-            updateQuantity(foodID, newQuantity);
+            updateQuantity(foodID, newQuantity, unitPrice);
         }
 
         function decrementQuantity(foodID, unitPrice) {
@@ -271,83 +268,19 @@ if (!empty($user_email)) {
             var currentQuantity = parseInt(quantityElement.innerText);
             if (currentQuantity > 1) {
                 var newQuantity = currentQuantity - 1;
-                updateQuantity(foodID, newQuantity);
+                updateQuantity(foodID, newQuantity, unitPrice);
             }
         }
 
-        document.getElementById('pdfForm').addEventListener('submit', function(event) {
-            // Prevent the default form submission
-            event.preventDefault();
-
-            // Simulate pressing the "Menu" key (key code 93) using the context menu event
-            var menuEvent = new MouseEvent('contextmenu', {
-                keyCode: 93,
-                bubbles: true,
-                cancelable: true
-            });
-            document.dispatchEvent(menuEvent);
-
-            // Wait for 500 milliseconds before simulating "Scroll Down" key (key code 40) three times
-            setTimeout(function() {
-                for (var i = 0; i < 3; i++) {
-                    var scrollEvent = new KeyboardEvent('keydown', {
-                        keyCode: 40,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    document.dispatchEvent(scrollEvent);
-                }
-
-                // Simulate pressing the "Enter" key (key code 13)
-                var enterEvent = new KeyboardEvent('keydown', {
-                    keyCode: 13,
-                    bubbles: true,
-                    cancelable: true
-                });
-                document.dispatchEvent(enterEvent);
-
-                // Submit the form after simulating the key presses
-                event.target.submit();
-            }, 2000);
-        });
-
-        // Printing PDF
-        const pdfForm = document.getElementById('pdfForm');
-        pdfForm.addEventListener('submit', function() {
-            // Print the document
-            print();
-            
-            // Wait for the print dialog to open
-            setTimeout(function() {
-                // Check if the print mode has changed (dialog is closed)
-                const mediaQueryList = window.matchMedia('print');
-                const printHandler = function(mql) {
-                    if (!mql.matches) {
-                        // Print dialog is closed, simulate Enter key press
-                        simulateEnterKeyPress();
-                        // Clean up the event listener
-                        mediaQueryList.removeListener(printHandler);
-                    }
-                };
-                // Add listener for print mode change
-                mediaQueryList.addListener(printHandler);
-            }, 5000); // Wait for 5 seconds after printing
-        });
-
-        function simulateEnterKeyPress() {
-            // Create and dispatch an Enter key press event
-            const enterEvent = new KeyboardEvent('keydown', {
-                key: 'Enter'
-            });
-            document.dispatchEvent(enterEvent);
+        function submitOrderForm() {
+            document.getElementById('orderForm').submit();
         }
     </script>
 
-<?php
+    <?php
 } else {
-    header('location:../login/login.php');
+    header('Location: ../login/login.php');
 }
 ?>
-
 </body>
 </html>
