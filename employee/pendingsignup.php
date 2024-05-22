@@ -49,7 +49,7 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>".$row["UserID"]."</td><td>".$row["FullName"]."</td><td>".$row["Email"]."</td><td>".$row["Phone"]."</td><td>".$row["DOB"]."</td><td>".$row["Gender"]."</td><td>".$row["Address"]."</td><td>".$row["User_Type"]."</td><td>".$row["OTP"]."</td>";
-        echo "<td><a href='approve.php?email=".$row["Email"]."&user_type=".$row["User_Type"]."' class='btn-approve'>Approve</a> <a href='decline.php?email=".$row["Email"]."&user_type=".$row["User_Type"]."' class='btn-decline'>Decline</a></td>";
+        echo "<td><a href='approve.php?UserID=".$row["UserID"]."&user_type=".$row["User_Type"]."' class='btn-approve'>Approve</a> <a href='decline.php?UserID=".$row["UserID"]."&user_type=".$row["User_Type"]."' class='btn-decline'>Decline</a></td>";
         echo "</tr>";
     }
     echo "</table>";

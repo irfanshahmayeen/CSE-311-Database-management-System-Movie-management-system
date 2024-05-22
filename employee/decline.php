@@ -2,11 +2,11 @@
 include '../connection.php';
 
 // Retrieve email and user_type from URL parameters
-$email = $_GET['email'] ?? '';
+$userid = $_GET['UserID'] ?? '';
 $user_type = $_GET['user_type'] ?? '';
 
 // Check if email and user_type are provided
-if (empty($email) || empty($user_type)) {
+if (empty($userid ) || empty($user_type)) {
     echo "Email and user type are required.";
     exit;
 }
@@ -15,13 +15,13 @@ if (empty($email) || empty($user_type)) {
 $image_filename = '';
 switch ($user_type) {
     case "user":
-        $find_sql = "SELECT * FROM tempusersignup WHERE Email ='$email'";
+        $find_sql = "SELECT * FROM tempusersignup WHERE UserID ='$userid'";
         break;
     case "admin":
-        $find_sql = "SELECT * FROM tempadminsignup WHERE Email ='$email'";
+        $find_sql = "SELECT * FROM tempadminsignup WHERE UserID ='$userid'";
         break;
     case "employee":
-        $find_sql = "SELECT * FROM tempemployeesignup WHERE Email ='$email'";
+        $find_sql = "SELECT * FROM tempemployeesignup WHERE UserID ='$userid'";
         break;
     default:
         echo "Invalid user type.";
@@ -50,13 +50,13 @@ if ($result && $result->num_rows > 0) {
 // Delete data from database
 switch ($user_type) {
     case "user":
-        $delete_sql = "DELETE FROM tempusersignup WHERE Email ='$email'";
+        $delete_sql = "DELETE FROM tempusersignup WHERE UserID ='$userid'";
         break;
     case "admin":
-        $delete_sql = "DELETE FROM tempadminsignup WHERE Email ='$email'";
+        $delete_sql = "DELETE FROM tempadminsignup WHERE UserID ='$userid'";
         break;
     case "employee":
-        $delete_sql = "DELETE FROM tempemployeesignup WHERE Email ='$email'";
+        $delete_sql = "DELETE FROM tempemployeesignup WHERE UserID ='$userid'";
         break;
     default:
         echo "Invalid user type.";

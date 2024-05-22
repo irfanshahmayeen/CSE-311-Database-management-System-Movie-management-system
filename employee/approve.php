@@ -3,11 +3,11 @@
 include '../connection.php';
 
 // Retrieve email and user_type from URL parameters
-$email = $_GET['email'] ?? '';
+$userid = $_GET['UserID'] ?? '';
 $user_type = $_GET['user_type'] ?? '';
 
 // Check if email and user_type are provided
-if (empty($email) || empty($user_type)) {
+if (empty($userid) || empty($user_type)) {
     echo "Email and user type are required.";
     exit;
 }
@@ -32,15 +32,14 @@ switch ($user_type) {
 }
 
 // Prepare select statement for retrieving data from the source table
-$select_sql = "SELECT * FROM $source_table WHERE Email = ?";
-$stmt = $conn->prepare($select_sql);
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
+$select_sql = "SELECT * FROM $source_table WHERE UserID = '$userid' AND OTP = 'valid'";
 
-if ($result->num_rows > 0) {
+$stmt = $conn->query($select_sql);
+
+
+if ( $stmt->num_rows > 0) {
     // Data found, fetch and store in variables
-    $row = $result->fetch_assoc();
+    $row = $stmt->fetch_assoc();
     $UserID = $row["UserID"];
     $FullName = $row["FullName"];
     $Email = $row["Email"];
@@ -54,21 +53,24 @@ if ($result->num_rows > 0) {
 
     // Prepare insert statement for inserting data into target table
     $insert_sql = "INSERT INTO $target_table (FullName, Email, Phone, DOB, Gender, Address, Password, User_Type, Image) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($insert_sql);
-    $stmt->bind_param("sssssssss", $FullName, $Email, $Phone, $DOB, $Gender, $Address, $Password, $User_Type, $Image);
-    $stmt->execute();
+     VALUES ('$FullName', '$Email', ' $Phone', '$DOB', '$Gender', ' $Address', '$Password', '$User_Type', '$Image')";
+    $stmt1= $conn->query( $insert_sql);
 
     // Data inserted successfully, now delete from source table
-    $delete_sql = "DELETE FROM $source_table WHERE Email = ?";
-    $stmt = $conn->prepare($delete_sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+    $delete_sql = "DELETE FROM $source_table WHERE UserID = '$userid'";
+    $stmt2= $conn->query($delete_sql);
+   
 
     echo "Data inserted and moved successfully.";
 } else {
-    echo "No data found for this email.";
+    echo "<script>alert('OTP Invalid'); setTimeout(function() { window.location.href = 'index.php'; }, 3000);</script>";
+   
+  
 }
+
+
+
+header('location:pendingsignup.php');
 
 // Close statement
 $stmt->close();

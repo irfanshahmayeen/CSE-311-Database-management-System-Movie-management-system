@@ -1,3 +1,7 @@
+ 
+ <?php
+    include '../connection/connection.php';
+ 
  if (isset($_POST['email'])) {
             $fullname = $_POST["fullname"];
                 
@@ -9,6 +13,10 @@
             $user_type = $_POST['user_type'];
             $password = $_POST["password"];
             $confirm_password = $_POST["confirm_password"];
+
+               
+
+
             if($user_type === 'user'){
                 $sql = "INSERT INTO usersignup ( FullName,  Email, Phone, DOB, Gender, Address, Password,User_Type)
                                     VALUES ('$fullname', '$email', '$phone', '$dob', '$gender', '$address', '$password','$user_type')";
@@ -34,3 +42,6 @@
                 // For security reasons, don't echo passwords in real application
                 $conn->close();
             }
+
+
+            ?>
