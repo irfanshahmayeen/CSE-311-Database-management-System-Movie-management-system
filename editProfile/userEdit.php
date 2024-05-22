@@ -10,8 +10,10 @@ if (!empty($user_email)) {
 <?php
 
 
-// Establish connection to database
+
+ob_start();
 include '../connection/connection.php';
+ob_end_clean();
 
 // Fetch user details from the database
 $user_email = $_SESSION['user_email'];
@@ -23,8 +25,7 @@ $result = $stmt->get_result();
 $row = $result->fetch_assoc();
 
 // Close statement and connection
-$stmt->close();
-$conn->close();
+
 
 ?>
 
@@ -34,13 +35,80 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="signup.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.container h2 {
+    text-align: center;
+}
+
+.container form {
+    margin-top: 20px;
+}
+
+.container input[type="text"],
+.container input[type="email"],
+.container input[type="tel"],
+.container input[type="date"],
+.container select,
+.container input[type="password"],
+.container button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.container input[type="file"] {
+    margin-top: 10px;
+}
+
+.container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    background-color: #45a049;
+}
+
+#error_message {
+    text-align: center;
+}
+
+.container p {
+    text-align: center;
+}
+
+.container a {
+    color: #fff;
+}
+
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Edit Profile</h2>
         <form action="updateProfile.php" method="POST" enctype="multipart/form-data">
-            <input type="text" name="fullname" placeholder="Full Name" value="<?php echo $row['Fullname']; ?>" required>
+            <input type="text" name="fullname" placeholder="Full Name" value="<?php echo $row['FullName']; ?>" required>
             <input type="email" name="email" placeholder="Email" value="<?php echo $row['Email']; ?>" required readonly>
             <input type="tel" name="phone" placeholder="Phone" value="<?php echo $row['Phone']; ?>" required>
             <input type="date" name="dob" value="<?php echo $row['DOB']; ?>" required>
@@ -54,22 +122,17 @@ $conn->close();
 
             <input type="text" name="address" placeholder="Address" value="<?php echo $row['Address']; ?>" required>
 
-            <select name="user_type" required>
-                <option value="">Select user type</option>
-                <option value="user" <?php if ($row['User_Type'] == 'user') echo 'selected'; ?>>User</option>
-                <option value="admin" <?php if ($row['User_Type'] == 'admin') echo 'selected'; ?>>Admin</option>
-                <option value="employee" <?php if ($row['User_Type'] == 'employee') echo 'selected'; ?>>Employee</option>
-            </select>
+           
 
             <!--For Image Upload-->
             <label for="Upload profile picture" style="color: aliceblue;">Upload Profile Picture:</label>
-            <input class="filee" type="file" name="upfile" id="image" onchange="previewImage(event)">
+            <input class="filee" type="file" id="image" name="upfile" placeholder="Image" onchange="previewImage(event)">
             <br>
-            <img id="preview" src="<?php echo $row['Image']; ?>" alt="Image Preview" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
+            <img id="preview" src="../signup/signupImages/<?php echo $row['Image']; ?>" alt="Image Preview" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
 
             <button type="submit" name="submit">Update Profile</button>
         </form>
-        <p style="color: aliceblue;">Already have an account? <a href="../login/login.php">Login</a></p>
+       
     </div>
 
     <!-- pop up when password and confirmed password doesn't match -->
