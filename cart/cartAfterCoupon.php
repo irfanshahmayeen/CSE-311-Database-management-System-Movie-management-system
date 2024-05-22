@@ -102,9 +102,13 @@ if (!empty($user_email)) {
             <div class="info">
                 <?php
                 include '../connection.php';
-
+                if(isset($_GET['discount_price']) AND $_GET['total_price'] ){
                 $discountPrice = $_GET['discount_price'];
                 $totalPrice = $_GET['total_price'] - $discountPrice;
+                }
+                else{
+                    header('location:cart.php');
+                }
 
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Handle food item deletion

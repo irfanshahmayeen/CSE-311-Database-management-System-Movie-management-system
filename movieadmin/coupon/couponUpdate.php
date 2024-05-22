@@ -4,7 +4,7 @@ include '../../connection/connection.php';
 if (isset($_GET['id'])) {
     $coupon_id = $_GET['id'];
 
-    $sql = "SELECT * FROM Coupon WHERE coupon_id = $coupon_id";
+    $sql = "SELECT * FROM coupon WHERE coupon_id = $coupon_id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -17,13 +17,25 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $coupon_id = $_POST['coupon_id'];
-    $code = $_POST['code'];
-    $discount = $_POST['discount'];
+    $coupon_code = $_POST['coupon_code'];
+    $percentage = $_POST['percentage'];
+    $max_discount = $_POST['max_discount'];
+    $usage_limit =$_POST['usage_limit'];
     $expiry_date = $_POST['expiry_date'];
     $description = $_POST['description'];
     $minimum_order = $_POST['minimum_order'];
+    $userlimit = $_POST['userlimit'];
 
-    $sql = "UPDATE Coupon SET code='$code', discount=$discount, expiry_date='$expiry_date', description='$description', minimum_order=$minimum_order WHERE coupon_id=$coupon_id";
+    $sql = "UPDATE coupon SET 
+                coupon_code='$coupon_code', 
+                percentage=$percentage, 
+                max_discount=$max_discount,
+                usage_limit =$usage_limit ,
+                expiry_date='$expiry_date', 
+                user_limit ='$userlimit',
+                description='$description', 
+                minimum_order=$minimum_order 
+            WHERE coupon_id=$coupon_id";
 
     if ($conn->query($sql) === TRUE) {
         echo "<div class='message success'>Coupon updated successfully!</div>";
@@ -31,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<div class='message error'>Error: " . $conn->error . "</div>";
     }
     header('Location: couponShow.php');
+    exit();
 }
 ?>
 
@@ -94,16 +107,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form action="" method="POST">
             <input type="hidden" name="coupon_id" value="<?php echo $row['coupon_id']; ?>">
             <div class="form-group">
-                <label for="code">Coupon Code:</label>
-                <input type="text" id="code" name="code" value="<?php echo $row['code']; ?>" required>
+                <label for="coupon_code">Coupon Code:</label>
+                <input type="text" id="coupon_code" name="coupon_code" value="<?php echo $row['coupon_code']; ?>" required>
             </div>
             <div class="form-group">
-                <label for="discount">Discount:</label>
-                <input type="number" step="0.01" id="discount" name="discount" value="<?php echo $row['discount']; ?>" required>
+                <label for="percentage">Discount Percentage:</label>
+                <input type="number" step="0.01" id="percentage" name="percentage" value="<?php echo $row['percentage']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="max_discount">Max Discount:</label>
+                <input type="number" step="0.01" id="max_discount" name="max_discount" value="<?php echo $row['max_discount']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="usage_limit">Usage Limit</label>
+                <input type="number" id="usage_limit" name="usage_limit" required>
             </div>
             <div class="form-group">
                 <label for="expiry_date">Expiry Date:</label>
                 <input type="date" id="expiry_date" name="expiry_date" value="<?php echo $row['expiry_date']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="userlimit">User uses Limit:</label>
+                <input type="number" name="userlimit" value="<?php echo $row['user_limit']; ?>" >
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>

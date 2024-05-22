@@ -9,7 +9,8 @@ if (!empty($user_email)) {
 
 
 <?php
-     $transactionID = uniqid('txn', true);
+
+     $transactionID = uniqid('txn', true);   //creating transaction id
 
      $foodSql = "SELECT booking_id FROM foodbookings 
      WHERE Email = '$user_email' AND PaymentStatus = 'unpaid'
@@ -48,7 +49,16 @@ if (!empty($user_email)) {
      }
 
 
-    
+     $updateSql = "UPDATE couponhistory 
+     SET use_status = 'yes' 
+     WHERE userEmail = '$user_email' 
+     AND id = (SELECT MAX(id) FROM couponhistory WHERE userEmail = '$user_email')";
+     $conn->query($updateSql);
+
+
+     $deleteSql = "DELETE FROM couponhistory  WHERE userEmail = '$user_email' AND use_status='no'";
+    $conn->query( $deleteSql);
+
 
 
 

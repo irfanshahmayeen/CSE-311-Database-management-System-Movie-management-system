@@ -12,12 +12,13 @@
             padding: 0;
         }
         .container {
-            max-width: 800px;
-            margin: 50px auto;
+            max-width: 1200px;
+            margin: 80px auto;
             background: #fff;
-            padding: 20px;
+            padding: 30px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            
         }
         h2 {
             margin-bottom: 20px;
@@ -32,8 +33,13 @@
         }
         th, td {
             padding: 10px;
-            text-align: left;
-        }
+    text-align: left;
+    width: 150px; /* Set an appropriate width for your data */
+    overflow: hidden; /* If the content is wider, it will be hidden */
+    text-overflow: ellipsis; /* Show ellipsis (...) if the content is wider */
+    white-space: nowrap; /* Prevent line breaks in the content */
+}
+        
         th {
             background-color: #f2f2f2;
         }
@@ -75,12 +81,14 @@
                 <tr>
                     <th>ID</th>
                     <th>Code</th>
-                    <th>Discount</th>
+                    <th>Percentage</th>
+                    <th>Max Discount</th>
+                    <th>MAX usage limit</th>
                     <th>Expiry Date</th>
+                    <th>User Limit</th>
                     <th>Description</th>
                     <th>Minimum Order</th>
-                    <th>Usage Limit</th> <!-- New column -->
-                    <th>Validity Duration (Days)</th> <!-- New column -->
+                    
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -88,20 +96,22 @@
                 <?php
                 include '../../connection/connection.php';
 
-                $sql = "SELECT * FROM Coupon";
+                $sql = "SELECT * FROM coupon";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . $row['coupon_id'] . "</td>";
-                        echo "<td>" . $row['code'] . "</td>";
-                        echo "<td>" . $row['discount'] . "</td>";
+                        echo "<td>" . $row['coupon_code'] . "</td>";
+                        echo "<td>" . $row['percentage'] . "</td>";
+                        echo "<td>" . $row['max_discount'] . "</td>";
+                        echo "<td>" . $row['usage_limit'] . "</td>";
                         echo "<td>" . $row['expiry_date'] . "</td>";
+                        echo "<td>" . $row['user_limit'] . "</td>";
                         echo "<td>" . $row['description'] . "</td>";
                         echo "<td>" . $row['minimum_order'] . "</td>";
-                        echo "<td>" . $row['usage_limit'] . "</td>"; // Output usage_limit column
-                        echo "<td>" . $row['validity_duration'] . "</td>"; // Output validity_duration column
+                     
                         echo "<td class='actions'>
                                 <a class='btn btn-update' href='couponUpdate.php?id=" . $row['coupon_id'] . "'>Update</a>
                                 <a class='btn btn-delete' href='couponDelete.php?id=" . $row['coupon_id'] . "'>Delete</a>
@@ -109,7 +119,7 @@
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='9'>No coupons found</td></tr>";
+                    echo "<tr><td colspan='10'>No coupons found</td></tr>";
                 }
 
                 $conn->close();

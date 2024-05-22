@@ -72,32 +72,36 @@
         <h2>Add Coupon</h2>
         <form action="" method="POST">
             <div class="form-group">
-                <label for="code">Coupon Code:</label>
-                <input type="text" id="code" name="code" required>
+                <label for="coupon_code">Coupon Code:</label>
+                <input type="text" id="coupon_code" name="coupon_code" required>
             </div>
             <div class="form-group">
-                <label for="discount">Discount:</label>
-                <input type="number" step="0.01" id="discount" name="discount" required>
+                <label for="percentage">Discount Percentage:</label>
+                <input type="number" step="0.01" id="percentage" name="percentage" required>
             </div>
             <div class="form-group">
-                <label for="expiry_date">Expiry Date:</label>
-                <input type="date" id="expiry_date" name="expiry_date" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description"></textarea>
+                <label for="max_discount">Max Discount:</label>
+                <input type="number" step="0.01" id="max_discount" name="max_discount" required>
             </div>
             <div class="form-group">
                 <label for="minimum_order">Minimum Order Amount:</label>
                 <input type="number" step="0.01" id="minimum_order" name="minimum_order" required>
             </div>
             <div class="form-group">
-                <label for="usage_limit">Usage Limit:</label>
-                <input type="number" id="usage_limit" name="usage_limit" value="1" required>
+                <label for="usage_limit">Usage LImit:</label>
+                <input type="number" id="usage_limit" name="usage_limit" required>
             </div>
             <div class="form-group">
-                <label for="validity_duration">Validity Duration (in days):</label>
-                <input type="number" id="validity_duration" name="validity_duration" value="1" required>
+                <label for="expiry_date">Expiry Date:</label>
+                <input type="date" id="expiry_date" name="expiry_date" required>
+            </div>
+            <div class="form-group">
+                <label for="userlimit">User uses Limit:</label>
+                <input type="number" id="userlimit" name="userlimit">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description"></textarea>
             </div>
             <div class="form-group">
                 <button type="submit" name="submit">Add Coupon</button>
@@ -108,23 +112,24 @@
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             include '../../connection/connection.php';
 
-            $code = $_POST['code'];
-            $discount = $_POST['discount'];
+            $coupon_code = $_POST['coupon_code'];
+            $percentage = $_POST['percentage'];
+            $max_discount = $_POST['max_discount'];
+            $minimum_order = $_POST['minimum_order'];
             $expiry_date = $_POST['expiry_date'];
             $description = $_POST['description'];
-            $minimum_order = $_POST['minimum_order'];
-            $usage_limit = $_POST['usage_limit'];
-            $validity_duration = $_POST['validity_duration'];
+            $userlimit = $_POST['userlimit'];
+            $usage_limit=$_POST['usage_limit'];
 
             // Check if the coupon code already exists
-            $checkSql = "SELECT * FROM Coupon WHERE code='$code'";
+            $checkSql = "SELECT * FROM coupon WHERE coupon_code='$coupon_code'";
             $checkResult = $conn->query($checkSql);
 
             if ($checkResult->num_rows > 0) {
                 echo "<div class='message error'>Error: Coupon code already exists.</div>";
             } else {
-                $sql = "INSERT INTO Coupon (code, discount, expiry_date, description, minimum_order, usage_limit, validity_duration) 
-                        VALUES ('$code', $discount, '$expiry_date', '$description', $minimum_order, $usage_limit, $validity_duration)";
+                $sql = "INSERT INTO coupon (coupon_code, percentage, max_discount, minimum_order,usage_limit, expiry_date,user_limit ,description) 
+                        VALUES ('$coupon_code', $percentage, $max_discount, $minimum_order, '$expiry_date','$userlimit', '$description','$usage_limit')";
 
                 if ($conn->query($sql) === TRUE) {
                     echo "<div class='message success'>Coupon added successfully!</div>";
