@@ -11,11 +11,13 @@ $subject = "Email Verification";
 $emailBody = "Your 6 Digit OTP Code For changing your password: $otp";
 
 if (smtp_mailer($receiverEmail, $subject, $emailBody)) {
-    $_SESSION['otp'] = $otp; // Save OTP in session for verification
+    $_SESSION['otpforpassword'] = $otp; // Save OTP in session for verification
     $_SESSION['receiverEmail'] = $receiverEmail; // Save receiver email for verification
     header("Location:checkOTP.php?email=".$_GET['email']."&user_type=".$_GET['user_type']);
+   
 } else {
     echo "Failed to send OTP. Please try again later.";
+    echo "<script>window.location.href = 'forgetPassword.php';</script>";
 }
 
 function smtp_mailer($to, $subject, $msg)

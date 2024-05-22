@@ -1,3 +1,44 @@
+<?php
+// Include the database connection file
+ob_start();
+include '../connection/connection.php';
+ob_end_clean();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $user_type = $_POST['user_type'];
+
+    // Determine the table name based on user type
+    $table = '';
+    switch ($user_type) {
+        case 'user':
+            $table = 'usersignup';
+            break;
+        case 'admin':
+            $table = 'adminsignup';
+            break;
+        case 'employee':
+            $table = 'employeesignup';
+            break;
+        default:
+            echo "<script>alert('Invalid user type');</script>";
+            exit;
+    }
+
+    // Query to check if the email exists in the selected table
+    $query = "SELECT * FROM $table WHERE Email = '$email'";
+    $result = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($result) == 0) {
+        // Email not found
+        echo "<script>alert('Email not found in the database');</script>";
+    } else {
+        // Email found, redirect to sendOTP.php
+        header("Location: sendOTP.php?email=$email&user_type=$user_type");
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +66,7 @@
         h2 {
             margin-bottom: 20px;
         }
-        input[type="email"] {
+        input[type="email"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -54,12 +95,18 @@
 
 <div class="container">
     <h2>Forgot Password</h2>
-    <form action="/reset-password" method="POST">
+    <form action="forgetPassword.php" method="POST">
         <input type="email" name="email" placeholder="Enter your email" required>
+        <select name="user_type" required>
+            <option value="">Select user type</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="employee">Employee</option>
+        </select>
         <button type="submit">Send Reset Link</button>
     </form>
     <div class="message">
-        Enter your email address and we'll send you a Code to reset your password.
+        Enter your email address and select your user type, and we'll send you a link to reset your password.
     </div>
 </div>
 

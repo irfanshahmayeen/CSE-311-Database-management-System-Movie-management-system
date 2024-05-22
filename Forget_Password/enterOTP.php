@@ -7,13 +7,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_type = htmlspecialchars($_POST['user_type']);
         $otpEntered = htmlspecialchars($_POST['otp']);
 
-        if ($_SESSION['otpforpassword'] == $otpEntered) {
+        if ($_SESSION['otpforpassword'] === $otpEntered) {
             echo "<script>alert('OTP matched Successfully');</script>";
-            header("Location: passwordSet.php?email=" . $email . "&user_type=" . $user_type);
+            header("Location: passwordSet.php?email=" . urlencode($email) . "&user_type=" . urlencode($user_type));
             exit();
         } else {
             echo "<script>alert('OTP does not match');</script>";
-            header("Location: checkOTP.php?email=" . $email. "&user_type=" . $user_type);
+            header("Location: checkOTP.php?email=" . urlencode($email) . "&user_type=" . urlencode($user_type));
             exit();
         }
     } else {
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 } else {
-    $email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '';
+    $email = isset($_GET['email']) ? urldecode(htmlspecialchars($_GET['email'])) : '';
     $user_type = isset($_GET['user_type']) ? htmlspecialchars($_GET['user_type']) : '';
 ?>
 <!DOCTYPE html>
