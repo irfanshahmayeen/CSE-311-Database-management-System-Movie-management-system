@@ -227,221 +227,161 @@ span {
 </header>
     <h1 style="text-align: center; color:#fff;">Movie Theater Seat Selection</h1>
 
-
     <div class="container">
-        <!-- Create seats using PHP -->
-        <?php
-        // Start output buffering to capture any output
-        ob_start();
+    <?php
+    ob_start();
 
+    // Include database connection
+    include '../../connection.php';
 
-        // Include database connection
-        include '../../connection.php';
+    ob_end_clean();
+    $HallMovieID = '6';
+    $bookingDate = '';
 
+    if (isset($_GET['hallMovieID'])) {
+        $HallMovieID  = $_GET['hallMovieID'];
+    }
+    if (isset($_GET['bookingDate'])) {
+        $bookingDate  = $_GET['bookingDate'];
+    }
 
-        // End output buffering and discard any captured output
-        ob_end_clean();
-        $HallMovieID='6';
-        $bookingDate='';
-        //recieving data from sent by ticket.php
-       if(isset($_GET['hallMovieID'])){
-            $HallMovieID  = $_GET['hallMovieID'];
-           
-           
-   
-            //$findsql = "SELECT * FROM  theatermovie WHERE  = HallMovieID='$HallMovieID'";
-            //$result1 = mysqli_query($conn,$findsql);
-            //$row1 =mysqli_fetch_array($result1);
-           // $HallLocation = $row1['Location'];
+    // Fetch the ticket price from the database
+    $ticketPriceQuery = "SELECT TicketPrice FROM theatermovie WHERE HallMovieID ='$HallMovieID'";
+    $resultprice = $conn->query($ticketPriceQuery);
+    $price = 10; // Default price
+    if ($resultprice && $resultprice->num_rows > 0) {
+        $pricerow = $resultprice->fetch_assoc();
+        $price = $pricerow['TicketPrice'];
+    }
+
+    // Fetch booked seats from the database
+    $sql = "SELECT SeatNumber FROM bookings WHERE HallMovieID ='$HallMovieID' AND BookingDate='$bookingDate'";
+    $result = mysqli_query($conn, $sql);
+
+    $bookedSeats = [];
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $bookedSeats[] = $row['SeatNumber'];
         }
-        if(isset($_GET['bookingDate'])){
-           
-            $bookingDate  = $_GET['bookingDate'];
-           
-   
-         
-        }
+    }
 
+    function isSeatBooked($seatNumber, $bookedSeats) {
+        return in_array($seatNumber, $bookedSeats);
+    }
 
+    function createSeats($bookedSeats, $price) {
+        $numRows = 6;
+        $seatsPerRow = 10;
 
-
-        // Fetch booked seats from the database
-        $sql = "SELECT SeatNumber FROM bookings WHERE HallMovieID ='$HallMovieID' AND BookingDate='$bookingDate'";
-        $result = mysqli_query($conn, $sql);
-
-
-        // Array to store booked seats
-        $bookedSeats = [];
-
-
-        // Check if there are booked seats
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $bookedSeats[] = $row['SeatNumber'];
+        for ($i = 0; $i < $numRows; $i++) {
+            for ($j = 0; $j < $seatsPerRow; $j++) {
+                $seatNumber = chr(65 + $i) . ($j + 1);
+                $class = isSeatBooked($seatNumber, $bookedSeats) ? 'seat booked' : 'seat';
+                echo "<div class='$class' data-seat='$seatNumber' data-price='$price'>$seatNumber</div>";
             }
         }
+    }
 
+    createSeats($bookedSeats, $price);
 
-        // Function to check if a seat is booked
-        function isSeatBooked($seatNumber, $bookedSeats) {
-            return in_array($seatNumber, $bookedSeats);
-        }                                            
+    mysqli_close($conn);
+    ?>
+</div>
 
-
-        // Function to create seats
-        function createSeats($bookedSeats) {
-            $numRows = 6;
-            $seatsPerRow = 10;
-
-
-            for ($i = 0; $i < $numRows; $i++) {
-                for ($j = 0; $j < $seatsPerRow; $j++) {
-                    // Create a seat element
-                    $seatNumber = chr(65 + $i) . ($j + 1);
-                    $class = isSeatBooked($seatNumber, $bookedSeats) ? 'seat booked' : 'seat';
-                    echo "<div class='$class' data-seat='$seatNumber' data-price='10'>$seatNumber</div>"; // Change 10 to the actual price
-                }
-            }
-        }
-
-
-        // Call the function to create seats
-        createSeats($bookedSeats);
-
-
-        // Close database connection
-        mysqli_close($conn);
-        ?>
-    </div>
-
-
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="bookingForm">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="bookingForm">
     <input type="hidden" name="HallMovieID" value='<?php echo $HallMovieID; ?>'>
     <input type="hidden" name="SeatNumber" id="seatNumbers">
     <input type="hidden" name="bookingTime" id="bookingTime">
     <input type="hidden" name="paymentStatus" value="unpaid">
-    <!-- Add the following line to include bookingDate in the form -->
     <input type="hidden" name="bookingDate" value='<?php echo $bookingDate; ?>'>
     <button type="submit" id="submitBtn">Submit</button>
     <a href="../../Food/foodOrder.php" id="addFoodLink">Add a Food</a>
-    <a href="../../cart/cart.php" id="addpayLink">pay card</a>
-
+    <a href="../../cart/cart.php" id="addpayLink">Pay Card</a>
 </form>
 
+<div class="side-view">
+    <h2>Selected Seats</h2>
+    <div class="selected-seats" id="selected-seats"></div>
+    <div class="total-price" id="total-price">Total Price: $0</div>
+</div>
 
-    <!-- Side view of the seat booking cart -->
-    <div class="side-view">
-        <h2>Selected Seats</h2>
-        <div class="selected-seats" id="selected-seats"></div>
-        <div class="total-price" id="total-price">Total Price: $0</div>
-    </div>
+<script>
+    const seats = document.querySelectorAll('.seat');
+    const selectedSeatsContainer = document.getElementById('selected-seats');
+    const totalPriceContainer = document.getElementById('total-price');
 
+    seats.forEach(seat => {
+        seat.addEventListener('click', selectSeat);
+    });
 
-    <script>
-        // Get all seat elements
-        const seats = document.querySelectorAll('.seat');
-        // Get selected seats container
-        const selectedSeatsContainer = document.getElementById('selected-seats');
-        // Get total price container
-        const totalPriceContainer = document.getElementById('total-price');
+    function selectSeat() {
+        if (this.classList.contains('booked')) {
+            alert('This seat is already booked.');
+            return;
+        }
+        this.classList.toggle('selected');
+        updateForm();
+        updateSideView();
+    }
 
+    function updateForm() {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        const seatNumbers = Array.from(selectedSeats).map(seat => seat.dataset.seat);
+        document.getElementById('seatNumbers').value = seatNumbers.join(',');
+        document.getElementById('bookingTime').value = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    }
 
-        // Add click event listener to each seat
-        seats.forEach(seat => {
-            seat.addEventListener('click', selectSeat);
+    function updateSideView() {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        let totalPrice = 0;
+        let seatsInfo = '';
+        selectedSeats.forEach(seat => {
+            const seatNumber = seat.dataset.seat;
+            const seatPrice = parseInt(seat.dataset.price);
+            totalPrice += seatPrice;
+            seatsInfo += `<div>Seat ${seatNumber} - $${seatPrice}</div>`;
         });
+        selectedSeatsContainer.innerHTML = seatsInfo;
+        totalPriceContainer.textContent = `Total Price: $${totalPrice}`;
+    }
+</script>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include '../../connection.php';
 
-        // Function to select/deselect a seat
-        function selectSeat() {
-            if (this.classList.contains('booked')) {
-                alert('This seat is already booked.');
-                return;
-            }
-            this.classList.toggle('selected');
-            updateForm();
-            updateSideView();
+    $bookingDate = isset($_POST['bookingDate']) ? $_POST['bookingDate'] : '';
+    $HallMovieID = $_POST['HallMovieID'];
+    $SeatNumbers = explode(',', $_POST['SeatNumber']);
+    $bookingTime = $_POST['bookingTime'];
+    $paymentStatus = $_POST['paymentStatus'];
+
+    $successSeatNumbers = [];
+
+    foreach ($SeatNumbers as $SeatNumber) {
+        $sql = "INSERT INTO bookings (HallMovieID, Email, SeatNumber, bookingDate, bookingTime, paymentStatus) VALUES ('$HallMovieID','$user_email', '$SeatNumber', '$bookingDate', '$bookingTime', '$paymentStatus')";
+        if (mysqli_query($conn, $sql)) {
+            $successSeatNumbers[] = $SeatNumber;
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+    }
 
+    if (!empty($successSeatNumbers)) {
+        $message = 'Booking successfully inserted into the database for seat(s): ' . implode(', ', $successSeatNumbers);
+        echo "<script>alert('$message')</script>";
+    }
 
-        // Function to update hidden form fields with selected seats and booking time
-        function updateForm() {
-            const selectedSeats = document.querySelectorAll('.seat.selected');
-            const seatNumbers = Array.from(selectedSeats).map(seat => seat.dataset.seat);
-            document.getElementById('seatNumbers').value = seatNumbers.join(',');
-            document.getElementById('bookingTime').value = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        }
-
-
-        // Function to update side view with selected seats and total price
-        function updateSideView() {
-            const selectedSeats = document.querySelectorAll('.seat.selected');
-            let totalPrice = 0;
-            let seatsInfo = '';
-            selectedSeats.forEach(seat => {
-                const seatNumber = seat.dataset.seat;
-                const seatPrice = parseInt(seat.dataset.price); // Assuming seat price is stored in 'data-price'
-                totalPrice += seatPrice;
-                seatsInfo += `<div>Seat ${seatNumber} - $${seatPrice}</div>`;
-            });
-            selectedSeatsContainer.innerHTML = seatsInfo;
-            totalPriceContainer.textContent = `Total Price: $${totalPrice}`;
-        }
-    </script>
-
-
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        include '../../connection.php';
-
-
-        // Retrieve bookingDate from the $_POST array
-$bookingDate = isset($_POST['bookingDate']) ? $_POST['bookingDate'] : '';
-
-
-// Prepare data for insertion
-$HallMovieID = $_POST['HallMovieID'];
-$SeatNumbers = explode(',', $_POST['SeatNumber']); // Split seat numbers into an array
-$bookingTime = $_POST['bookingTime'];
-$paymentStatus = $_POST['paymentStatus'];
-
-
-// Array to store successfully inserted seat numbers
-$successSeatNumbers = [];
-
-
-// Insert data into the database
-foreach ($SeatNumbers as $SeatNumber) {
-    $sql = "INSERT INTO bookings (HallMovieID,Email ,SeatNumber, bookingDate, bookingTime, paymentStatus) VALUES ('$HallMovieID','$user_email', '$SeatNumber', '$bookingDate', '$bookingTime', '$paymentStatus')";
-    if (mysqli_query($conn, $sql)) {
-        $successSeatNumbers[] = $SeatNumber; // Add successfully inserted seat number to the array
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    mysqli_close($conn);
+    if (!empty($successSeatNumbers)) {
+        echo "<script>window.location = 'booking.php?hallMovieID=$HallMovieID&bookingDate=$bookingDate';</script>";
+        exit;
     }
 }
+?>
 
-
-        // Display the alert message with the successfully inserted seat numbers
-        if (!empty($successSeatNumbers)) {
-            $message = 'Booking successfully inserted into the database for seat(s): ' . implode(', ', $successSeatNumbers);
-            echo "<script>alert('$message')</script>";
-        }
-
-
-        mysqli_close($conn);
-        if (!empty($successSeatNumbers)) {
-            echo "<script>window.location = 'booking.php?hallMovieID=$HallMovieID&bookingDate=$bookingDate';</script>";
-            exit; // Terminate further execution
-        }
-    }
-    ?>
-
-
-    <?php  }else{
-  header('location:../login/login.php');
+<?php } else {
+    header('location:../login/login.php');
 } ?>
-
-
 </body>
 </html>
-
