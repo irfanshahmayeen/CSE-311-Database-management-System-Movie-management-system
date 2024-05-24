@@ -179,7 +179,7 @@ if (!empty($user_email)) {
             padding: 15px 30px;
             border: none;
             background-color: #028df7;
-            color: black;
+            color: white;
             border-radius: 50px;
             cursor: pointer;
             font-size: 18px;
