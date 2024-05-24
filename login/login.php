@@ -26,9 +26,18 @@ if(isset($_POST['email'], $_POST['password'], $_POST['user_type'])) {
         $user_id = $data['UserID'];
         $user_email =$data['Email'];
 
-        session_start();
+        if($user_type === 'admin') {
+            session_start();
 
-        $_SESSION['user_email'] = $user_email;
+            $_SESSION['admin_email'] = $user_email;
+            
+        } else if ($user_type === 'user'){
+            session_start();
+
+            $_SESSION['user_email'] = $user_email;
+        }
+
+       
         
         if($user_type === 'admin') {
             header("location:../movieadmin/AdminShowMovieList.php");
