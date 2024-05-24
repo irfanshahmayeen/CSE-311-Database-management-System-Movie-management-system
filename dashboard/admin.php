@@ -1,8 +1,8 @@
 <?php
 session_start();
-$user_email = $_SESSION['user_email'];
+$admin_email = $_SESSION['admin_email'];
 
-if (!empty($user_email)) {
+if (!empty($admin_email)) {
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ if (!empty($user_email)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Admin Profile</title>
     <style>
         :root {
             --text-color: #fff;
@@ -20,9 +20,9 @@ if (!empty($user_email)) {
             --h2-font: 3rem;
             --p-font: 1rem;
             --card-color: #137db1;
-            --color1: #FF5733; /* Color for initial set of buttons */
-            --color2: #33FFBD; /* Color for clicked functionality buttons */
-            --color3: #FF33A1; /* Color for next functionality buttons */
+            --color1: #FF5733;
+            --color2: #33FFBD;
+            --color3: #FF33A1;
         }
 
         header {
@@ -92,10 +92,6 @@ if (!empty($user_email)) {
             font-size: 17px;
         }
 
-        .submit-button button:hover {
-            background-color: var(--main-color);
-        }
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -115,77 +111,18 @@ if (!empty($user_email)) {
 
         .profile-container {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
         }
 
         .profile-info {
-            flex: 1;
-            margin-right: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .profile-actions {
-            flex: 2;
-            margin-left: 20px;
+        .profile-actions-wrapper {
             display: flex;
-            flex-direction: column;
-        }
-
-        h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #ff0000;
-            text-align: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 5px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #ffff80;
-        }
-
-        .menu {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .menu ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-
-        .menu ul li a {
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 18px;
-        }
-
-        .menu ul li a:hover {
-            color: #00ff00;
-        }
-
-        .profile-image {
-            display: block;
-            margin: 0 auto;
-            width: 150px;
-            height: auto;
-            border-radius: 50%;
-            margin-bottom: 20px;
+            align-items: flex-start;
         }
 
         .action-buttons {
@@ -203,6 +140,7 @@ if (!empty($user_email)) {
             background-color: var(--color1);
             color: white;
             text-align: left;
+            width: 200px;
         }
 
         .secondary-btn, .child-btn {
@@ -210,15 +148,21 @@ if (!empty($user_email)) {
             flex-direction: column;
         }
 
-        .secondary-btn.active, .child-btn.active {
+        .secondary-btn.active {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+        }
+
+        .child-btn.active {
             display: flex;
         }
 
         .intermediate-btn {
             background-color: var(--color2);
-            margin: 5px 0;
+            margin: 5px 10px;
             padding: 10px 20px;
-            width: 100%;
+            width: auto;
             text-align: left;
         }
 
@@ -242,21 +186,106 @@ if (!empty($user_email)) {
         .child-btn a:hover {
             text-decoration: underline;
         }
+        
+        nav {
+            display: flex;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: var(--main-color);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
 
 <header>
-    <a href="homepage.php" class="logo">IZI <span>Movie</span></a>
-    <ul class="navbar">
-        <li><a href="../test/homepage.php">Home</a></li>
-        <li><a href="../movieadmin/AdminShowMovieList.php">Movies</a></li>
-        <li><a href="#">Watchlist</a></li>
-        <li><a href="#">Directors</a></li>
-        <li><a href="#">Top10</a></li>
-        <li><a href="#">Trailer</a></li>
-        <li><a href="#">Theater</a></li>
-    </ul>
+    
+    
+
+    <nav>
+        <ul>
+            <li><a href="../test/homepage.php">Home</a></li>
+            <li><a href="../movieadmin/AdminShowMovieList.php">Movies</a></li>
+
+            <li class="dropdown">
+                <a href="#">Language</a>
+                <div class="dropdown-content">
+                    <a href="add_language.php">Add Language</a>
+                    <a href="show_language.php">Show Language</a>
+                    <a href="delete_language.php">Delete Language</a>
+                    <!-- Add more dropdown items as needed -->
+                </div>
+                
+            </li>
+
+            <li class="dropdown">
+                <a href="#">Genre</a>
+                <div class="dropdown-content">
+                    <a href="add_language.php">Add Genre</a>
+                    <a href="show_language.php">Show Genre</a>
+                    <a href="delete_language.php">Delete Genre</a>
+                    <!-- Add more dropdown items as needed -->
+                </div>
+                
+            </li>
+
+            
+            
+                
+          
+            
+            <!-- Add more top-level navigation items as needed -->
+        </ul>
+    </nav>
     <form class="search-form" action="/search" method="GET">
         <div class="search-bar">
             <input type="text" name="query" placeholder="Search...">
@@ -270,17 +299,17 @@ if (!empty($user_email)) {
 <div class="profile-container">
     <div class="profile-info">
         <?php
-        include '../connection.php';
+        include '../connection/connection.php';
 
         echo '<div class="container">';
-        echo '<h2>User Profile</h2>';
+        echo '<h2>Admin Profile</h2>';
 
-        $sql = "SELECT * FROM usersignup WHERE Email='$user_email'";
+        $sql = "SELECT * FROM adminsignup WHERE Email='$admin_email'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            echo '<img src="../signup/signupImages/' . $row['Image'] . '" alt="User Image" class="profile-image">';
+            echo '<img src="../signup/signupImages/' . $row['Image'] . '" alt="User Image" style="display: block; margin-left: auto; margin-right: auto; width: 150px; height: 150px; border-radius: 100%;">';
             echo "<table>";
             echo "<tr><th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>DOB</th><th>Gender</th><th>Address</th></tr>";
             echo "<tr>";
@@ -299,112 +328,109 @@ if (!empty($user_email)) {
 
         echo '</div>';
         ?>
+    </div>
 
+    <div class="profile-actions-wrapper">
         <div class="action-buttons">
-            <button id="main-btn">Main</button>
-            <button id="movies-btn">Movies</button>
-            <button id="food-btn">Food</button>
-            <button id="review-btn">Review</button>
+            <button id="language">Language</button>
+            <button id="genre">Genre</button>
+            <button id="director">Director</button>
+            <button id="cast">Cast</button>
+            <button id="producer">Producer</button>
+            <button id="all-movies">All Movies</button>
+            <button id="food">Food</button>
+            <button id="reviews">Reviews</button>
+            <button id="coupon">Coupon</button>
+            <button id="producer-income">Producer Income</button>
+            <button id="approve-account">Approve Account</button>
+            <button id="others">Others</button>
+        </div>
+
+        <div class="profile-actions">
+            <div class="secondary-btn language-section">
+                <a class="intermediate-btn" href="add_language.php">Add Language</a>
+                <a class="intermediate-btn" href="show_language.php">Show Language</a>
+                <a class="intermediate-btn" href="delete_language.php">Delete Language</a>
+            </div>
+
+            <div class="secondary-btn genre-section">
+                <a class="intermediate-btn" href="add_genre.php">Add Genre</a>
+                <a class="intermediate-btn" href="show_genre.php">Show Genre</a>
+                <a class="intermediate-btn" href="delete_genre.php">Delete Genre</a>
+            </div>
+
+            <div class="secondary-btn director-section">
+                <a class="intermediate-btn" href="add_director.php">Add Director</a>
+                <a class="intermediate-btn" href="show_director.php">Show Director</a>
+                <a class="intermediate-btn" href="delete_director.php">Delete Director</a>
+                <a class="intermediate-btn" href="assign_director.php">Assign Director to Movie</a>
+            </div>
+
+            <div class="secondary-btn cast-section">
+                <a class="intermediate-btn" href="add_cast.php">Add Cast</a>
+                <a class="intermediate-btn" href="show_cast.php">Show Cast</a>
+                <a class="intermediate-btn" href="delete_cast.php">Delete Cast</a>
+                <a class="intermediate-btn" href="assign_cast.php">Assign Cast to Movie</a>
+            </div>
+
+            <div class="secondary-btn producer-section">
+                <a class="intermediate-btn" href="add_producer.php">Add Producer</a>
+                <a class="intermediate-btn" href="show_producer.php">Show Producer</a>
+                <a class="intermediate-btn" href="delete_producer.php">Delete Producer</a>
+                <a class="intermediate-btn" href="assign_producer.php">Assign Producer to Movie</a>
+            </div>
+
+            <div class="secondary-btn all-movies-section">
+                <a class="intermediate-btn" href="add_movie.php">Add Movie</a>
+                <a class="intermediate-btn" href="show_movie.php">Show Movie</a>
+                <a class="intermediate-btn" href="delete_movie.php">Delete Movie</a>
+            </div>
+
+            <div class="secondary-btn food-section">
+                <a class="intermediate-btn" href="add_food.php">Add Food</a>
+                <a class="intermediate-btn" href="show_food.php">Show Food</a>
+                <a class="intermediate-btn" href="delete_food.php">Delete Food</a>
+            </div>
+
+            <div class="secondary-btn reviews-section">
+                <a class="intermediate-btn" href="movie_rating.php">Movie Rating</a>
+                <a class="intermediate-btn" href="cast_rating.php">Cast Rating</a>
+                <a class="intermediate-btn" href="director_rating.php">Director Rating</a>
+            </div>
+
+            <div class="secondary-btn coupon-section">
+                <a class="intermediate-btn" href="add_coupon.php">Add Coupon</a>
+                <a class="intermediate-btn" href="show_coupon.php">Show Coupon</a>
+                <a class="intermediate-btn" href="delete_coupon.php">Delete Coupon</a>
+            </div>
+
+            <div class="secondary-btn producer-income-section">
+                <a class="intermediate-btn" href="producer_income.php">Producer Income</a>
+            </div>
+
+            <div class="secondary-btn approve-account-section">
+                <a class="intermediate-btn" href="approve_account.php">Approve Account</a>
+            </div>
+
+            <div class="secondary-btn others-section">
+                <a class="intermediate-btn" href="button1.php">Button 1</a>
+                <a class="intermediate-btn" href="button2.php">Button 2</a>
+                <a class="intermediate-btn" href="button3.php">Button 3</a>
+            </div>
         </div>
     </div>
 
-    <div class="profile-actions">
-        <div class="secondary-btn" id="secondary-btn">
-            <div class="main-btn">
-                <button class="intermediate-btn" data-target="lang-gen">Language and Genre</button>
-                <button class="intermediate-btn" data-target="director">Director</button>
-                <button class="intermediate-btn" data-target="cast">Cast</button>
-                <button class="intermediate-btn" data-target="producer">Producer</button>
-            </div>
-
-            <div class="movies-btn">
-                <button class="intermediate-btn" data-target="add-movies">Add Movies</button>
-                <button class="intermediate-btn" data-target="movie-show">Show Movies</button>
-                <button class="intermediate-btn" data-target="update-movies">Update Movies</button>
-                <button class="intermediate-btn" data-target="delete-movies">Delete Movies</button>
-            </div>
-
-            <div class="food-btn">
-                <button class="intermediate-btn" data-target="add-food">Add Food</button>
-                <button class="intermediate-btn" data-target="show-food">Show Food</button>
-                <button class="intermediate-btn" data-target="delete-food">Delete Food</button>
-            </div>
-
-            <div class="review-btn">
-                <button class="intermediate-btn" data-target="add-review">Add Review</button>
-                <button class="intermediate-btn" data-target="show-review">Show Review</button>
-                <button class="intermediate-btn" data-target="delete-review">Delete Review</button>
-            </div>
+    <div class="child-btn" id="child-btn">
+        <div class="add-movies">
+            <button><a href="add_movie.php">Add Movies</a></button>
         </div>
 
-        <div class="child-btn" id="child-btn">
-            <div class="lang-gen">
-                <button><a href="" class="add-lang-gen">Add Language and Genre</a></button>
-                <button><a href="" class="show-lang-gen">Show Language and Genre</a></button>
-                <button><a href="" class="up-lang-gen">Update</a></button>
-                <button><a href="" class="del-lang-gen">Delete</a></button>
-            </div>
+        <div class="show-movies">
+            <button><a href="show_movie.php">Show Movies</a></button>
+        </div>
 
-            <div class="director">
-                <button><a href="" class="add-director">Add Director</a></button>
-                <button><a href="" class="show-director">Show Director</a></button>
-                <button><a href="" class="up-director">Update</a></button>
-                <button><a href="" class="del-director">Delete</a></button>
-            </div>
-
-            <div class="cast">
-                <button><a href="" class="add-cast">Add Cast</a></button>
-                <button><a href="" class="show-cast">Show Cast</a></button>
-                <button><a href="" class="up-cast">Update</a></button>
-                <button><a href="" class="del-cast">Delete Cast</a></button>
-            </div>
-
-            <div class="producer">
-                <button><a href="" class="add-prod">Add Producer</a></button>
-                <button><a href="" class="show-prod">Show Producer</a></button>
-                <button><a href="" class="up-prod">Update</a></button>
-                <button><a href="" class="del-prod">Delete Producer</a></button>
-            </div>
-
-            <div class="add-movies">
-                <button><a href="" class="add-movies2">Add Movies</a></button>
-            </div>
-
-            <div class="movie-show">
-                <button><a href="" class="movie-show2">Show Movies</a></button>
-            </div>
-
-            <div class="update-movies">
-                <button><a href="" class="update-movies2">Update</a></button>
-            </div>
-
-            <div class="delete-movies">
-                <button><a href="" class="delete-movies2">Delete Movies</a></button>
-            </div>
-
-            <div class="add-food">
-                <button><a href="" class="add-food2">Add Foods</a></button>
-            </div>
-
-            <div class="show-food">
-                <button><a href="" class="show-food2">Show Foods</a></button>
-            </div>
-
-            <div class="delete-food">
-                <button><a href="" class="delete-food2">Delete Foods</a></button>
-            </div>
-
-            <div class="add-review">
-                <button><a href="" class="add-review2">Add Reviews</a></button>
-            </div>
-
-            <div class="show-review">
-                <button><a href="" class="show-review2">Show Reviews</a></button>
-            </div>
-
-            <div class="delete-review">
-                <button><a href="" class="delete-review2">Delete Reviews</a></button>
-            </div>
+        <div class="delete-movies">
+            <button><a href="delete_movie.php">Delete Movies</a></button>
         </div>
     </div>
 </div>
@@ -412,27 +438,25 @@ if (!empty($user_email)) {
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const actionButtons = document.querySelectorAll('.action-buttons button');
-        const secondaryBtnContainer = document.getElementById('secondary-btn');
-        const secondarySections = secondaryBtnContainer.querySelectorAll('div');
+        const secondaryBtnContainer = document.querySelector('.profile-actions');
+        const secondarySections = secondaryBtnContainer.querySelectorAll('.secondary-btn');
         const intermediateButtons = document.querySelectorAll('.intermediate-btn');
         const childBtnContainer = document.getElementById('child-btn');
         const childSections = childBtnContainer.querySelectorAll('div');
 
         actionButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const targetClass = button.id.replace('-btn', '');
+                const targetClass = button.id + '-section';
                 secondarySections.forEach(section => section.classList.remove('active'));
-                document.querySelector(`.${targetClass}-btn`).classList.add('active');
-                secondaryBtnContainer.classList.add('active');
+                document.querySelector(`.${targetClass}`).classList.add('active');
                 childSections.forEach(section => section.classList.remove('active'));
-                // Hide all child sections initially
                 childBtnContainer.classList.remove('active');
             });
         });
 
         intermediateButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const target = button.dataset.target;
+                const target = button.getAttribute('href').split('.php')[0];
                 childSections.forEach(section => section.classList.remove('active'));
                 document.querySelector(`.${target}`).classList.add('active');
                 childBtnContainer.classList.add('active');
