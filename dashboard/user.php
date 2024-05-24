@@ -47,21 +47,6 @@ span {
     color: var(--main-color);
 }
 
-.navbar {
-    display: flex;
-}
-
-.navbar a {
-    color: var(--text-color);
-    font-size: var(--p-font);
-    font-weight: bold;
-    margin: 15px 22px;
-    transition: all 0.5s ease;
-}
-
-.navbar a:hover {
-    color: var(--main-color);
-}
 
 .search-form {
     display: flex;
@@ -185,6 +170,24 @@ span {
             border-radius: 50%; /* Make it circular */
             margin-bottom: 150px; /* Adjust spacing */
         }
+
+        /*  navbar*/
+        .navbar {
+    display: flex;
+}
+
+.navbar a {
+    color: var(--text-color);
+    font-size: var(--p-font);
+    font-weight: bold;
+    margin: 15px 22px;
+    transition: all 0.5s ease;
+}
+
+.navbar a:hover {
+    color: var(--main-color);
+}
+
     </style>
 </head>
 <body>
@@ -199,6 +202,7 @@ span {
         <li><a href="#">Top10</a></li>
         <li><a href="#">Trailer</a></li>
         <li><a href="#">Theater</a></li>
+        
     </ul>
     <form class="search-form" action="/search" method="GET">
         <div class="search-bar">
