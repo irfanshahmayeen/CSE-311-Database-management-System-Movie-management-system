@@ -146,7 +146,7 @@ if (!empty($user_email)) {
         h2 {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #ff0000;
+            color: #ffffff;
             text-align: center;
         }
 
@@ -581,6 +581,7 @@ if (!empty($user_email)) {
     </div>
 </div>
 
+
 <?php
 ob_start();
  include '../connection.php';
@@ -594,6 +595,7 @@ ob_start();
  echo '<div class="container">';
  echo '<h2>User Profile</h2>';
 
+
  // Fetch data from the signup table
  $sql = "SELECT * FROM usersignup WHERE Email='$user_email'";
  $result = $conn->query($sql);
@@ -601,6 +603,7 @@ ob_start();
  if ($result->num_rows > 0) {
      // Output data in a tabular form
      $row = $result->fetch_assoc();
+     echo '<h2>Welcome, '. $row['FullName'] .'   </h2>';
      echo '<img src="../signup/signupImages/' . $row['Image'] . '" alt="User Image" style="display: block; margin-left: auto; margin-right: auto; width: 150px; height: 150px; border-radius: 100%;">';
      echo "<table>";
      echo "<tr><th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>DOB</th><th>Gender</th><th>Address</th></tr>";
