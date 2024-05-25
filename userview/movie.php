@@ -1,15 +1,23 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Movie Database</title>
+<header>
+   <?php include '../navbar/nav.php';?>
+</header>
+
 <style>
 body {
+    padding-top: 70px;
     font-family: Arial, sans-serif;
 }
 
 .container {
+    margin-top: 20px;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -57,6 +65,8 @@ body {
 </style>
 </head>
 <body>
+    <h1 class="container"> MOVIES LIST</h1>
+
 
 <div class="container">
     <?php
