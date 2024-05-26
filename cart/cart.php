@@ -1,5 +1,8 @@
 <?php
+ob_start();
 include '../connection.php';
+ob_end_clean();
+
 session_start();
 $user_email = $_SESSION['user_email'];
 if (!empty($user_email)) {
@@ -15,9 +18,11 @@ if (!empty($user_email)) {
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            padding-top: 70px;
         }
 
         .container {
+            margin-top-70px;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
@@ -93,6 +98,7 @@ if (!empty($user_email)) {
     </style>
 </head>
 <body>
+       <?php  include '../navbar/nav.php'  ?>
     <div class="container">
         <h1>Payment Slip</h1>
         <div class="payment-details">
