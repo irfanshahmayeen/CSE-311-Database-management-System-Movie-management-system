@@ -212,10 +212,33 @@ span {
         </thead>
         <tbody>
         <?php
+        ob_start();
         include '../../connection.php';
+        ob_end_clean();
+        $location="";
 
+         if(isset($_GET['location'])){
+        $location = $_GET['location'];
+         }
+       
         // Query to fetch movie information from theaterMovie and movie tables
-        $query = "SELECT theatermovie.*, movie.* FROM theatermovie INNER JOIN movie ON theatermovie.MovieID = movie.MovieID";
+        if($location==="All"){
+        $query = "SELECT theatermovie.*, movie.* 
+        FROM theatermovie 
+        INNER JOIN movie 
+        ON theatermovie.MovieID = movie.MovieID ";
+       
+       
+        }
+        else{
+          $query = "SELECT theatermovie.*, movie.* 
+        FROM theatermovie 
+        INNER JOIN movie 
+        ON theatermovie.MovieID = movie.MovieID 
+        WHERE theatermovie.Location = '$location'";
+        
+
+        }
         $result = mysqli_query($conn, $query);
 
         // Check if query executed successfully and returned a valid result
